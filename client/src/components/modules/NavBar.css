@@ -9,7 +9,9 @@
   }
   
   .NavBar-linkContainer {
-    margin-left: var(--l);
+    margin-left: var(--xl);
+    margin-top: var(--m);
+    vertical-align: top;
   }
   
   .NavBar-link,
@@ -28,6 +30,6 @@
   }
   
   .NavBar-link + .NavBar-link {
-    margin-left: var(--m);
+    margin-left: var(--xl);
   }
   

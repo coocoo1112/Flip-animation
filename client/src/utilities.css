@@ -20,7 +20,7 @@
 :root {
   --main-green: #618282;
   --main-yellow: #EDAB3A;
-  --darkgrey: #d4d4d4;
+  --light-yellow: #FFF9EE;
   --medgrey: #e0e0e0;
   --grey: #f7f7f7;
   --white: #fff;
@@ -29,6 +29,7 @@
   --s: 8px;
   --m: 16px;
   --l: 24px;
+  --xl: 32px;
 }
 
 body {
