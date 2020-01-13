@@ -72,6 +72,10 @@ form {
   text-align: center;
 }
 
+.u-alignCenter {
+  align-content: center;
+}
+
 .u-relative {
   position: relative;
 }

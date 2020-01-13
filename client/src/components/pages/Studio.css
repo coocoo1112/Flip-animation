@@ -2,3 +2,15 @@ html,
 body{
     background-color: var(--light-yellow);
 }
+
+.CanvasContainer {
+    text-align: center;
+    margin-top: var(--xl);
+
+}
+
+.Canvas {
+    border-color: var(--main-green);
+    border-style: solid;
+    border-width: var(--xs);
+}
