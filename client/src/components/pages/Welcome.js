@@ -7,9 +7,10 @@ import "./Welcome.css";
 //TODO: REPLACE WITH YOUR OWN CLIENT_ID
 const GOOGLE_CLIENT_ID = "121479668229-t5j82jrbi9oejh7c8avada226s75bopn.apps.googleusercontent.com";
 
-class Welcome extends React.Component {
+class Welcome extends Component {
     constructor(props) {
         super(props);
+        this.state = {};
         this.canvasRef = React.createRef();
         this.logoRef = React.createRef();
         this.circle1 = new FloatingCircle("#84AAAA");
@@ -36,7 +37,8 @@ class Welcome extends React.Component {
       this.circle5.draw(ctx, canvas);
       this.circle6.draw(ctx, canvas);
       this.circle7.draw(ctx, canvas);
-      this.circle8.draw(ctx, canvas);    
+      this.circle8.draw(ctx, canvas);   
+      // console.log(this.props.onSuccess) 
     }
   
     render() {
@@ -44,13 +46,21 @@ class Welcome extends React.Component {
         <>
           
           <div class="CanvasContainer">
-            <GoogleLogin
-              clientId={GOOGLE_CLIENT_ID}
-              buttonText="Login"
-              onSuccess={this.props.handleLogin}
-              onFailure={(err) => console.log(err)}
-              // color ="EDAB3A"
-            />
+            {this.props.userId ? (
+              <GoogleLogout
+                clientId={GOOGLE_CLIENT_ID}
+                buttonText="Logout"
+                onLogoutSuccess={this.props.handleLogout}
+                onFailure={(err) => console.log(err)}
+              />
+            ) : (
+              <GoogleLogin
+                clientId={GOOGLE_CLIENT_ID}
+                buttonText="Login"
+                onSuccess={this.props.handleLogin}
+                onFailure={(err) => console.log(err)}
+              />
+            )}
             <div class="welcomeText">Welcome To</div>
             <img src = {require("../../../../assets/flip_logo-2.png")} class="bigLogo"/>
             <div class="buttonContainer">
@@ -130,7 +140,7 @@ class WelcomeAnimation extends React.Component {
     }
   
     render() {
-      return <Welcome angle={this.state.angle} />;
+      return <Welcome/>;
     }
 }
 

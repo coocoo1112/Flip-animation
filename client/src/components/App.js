@@ -51,7 +51,7 @@ class App extends Component {
   render() {
     return (
       <>
-        {this.props.userId ? (
+        {/* {this.props.userId ? ( */}
           <>
             <NavBar/>
             <div>
@@ -62,7 +62,12 @@ class App extends Component {
                   handleLogout={this.handleLogout}
                   userId={this.state.userId}
                 />
-                <Welcome path="/welcome/"/>
+                <Welcome 
+                  path="/welcome/"
+                  handleLogin={this.handleLogin}
+                  handleLogout={this.handleLogout}
+                  userId={this.state.userId}
+                />
                 <Studio
                   path="/studio/"
                 />
@@ -71,7 +76,7 @@ class App extends Component {
               </Router>
             </div>
           </>
-          
+{/*           
         ) : (
           <>
             <Welcome 
@@ -80,8 +85,8 @@ class App extends Component {
               handleLogout={this.handleLogout}
               userId={this.state.userId}
             />
-          </>
-        )}
+          </> */}
+        {/* )} */}
       </>
     );
   }
