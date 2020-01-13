@@ -25,14 +25,14 @@ class Welcome extends React.Component {
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = "#84AAAA";
 
-      this.circle1.draw(ctx);
-      this.circle2.draw(ctx);
-      this.circle3.draw(ctx);
-      this.circle4.draw(ctx);
-      this.circle5.draw(ctx);
-      this.circle6.draw(ctx);
-      this.circle7.draw(ctx);
-      this.circle8.draw(ctx);    
+      this.circle1.draw(ctx, canvas);
+      this.circle2.draw(ctx, canvas);
+      this.circle3.draw(ctx, canvas);
+      this.circle4.draw(ctx, canvas);
+      this.circle5.draw(ctx, canvas);
+      this.circle6.draw(ctx, canvas);
+      this.circle7.draw(ctx, canvas);
+      this.circle8.draw(ctx, canvas);    
     }
   
     render() {
@@ -43,7 +43,13 @@ class Welcome extends React.Component {
             <div class="welcomeText">Welcome To</div>
             <img src = {require("../../../../assets/flip_logo-2.png")} class="bigLogo"/>
             <div class="buttonContainer">
-              <button class="goButton">Let's Get Started</button>
+              <div class="linkContainer">
+                <a 
+                  class="goButton"
+                  href = "/studio/">
+                    Let's Get Started
+                </a>
+              </div>
             </div>
             
             <canvas width={innerWidth} height={innerHeight} ref={this.canvasRef} class="Canvas" />
@@ -78,7 +84,7 @@ class FloatingCircle {
     //   this.height = diameter;
     // }
 
-    draw(ctx) {
+    draw(ctx, canvas) {
       ctx.fillStyle = this.color;
       ctx.globalAlpha = this.alpha;
       ctx.beginPath()
@@ -87,6 +93,20 @@ class FloatingCircle {
 
       this.x += this.dx;
       this.y += this.dy;
+      console.log(this.x + ", " + this.y);
+
+      if (this.x > canvas.width + this.width) {
+        this.x = -this.width;
+      }
+      if (this.x < -this.width) {
+        this.x = canvas.width + this.width;
+      }
+      if (this.y > canvas.height + this.width) {
+        this.y = -this.width;
+      }
+      if (this.y < -this.width) {
+        this.y = canvas.height + this.width;
+      }
     }
 
     // duplicate(x, y) {

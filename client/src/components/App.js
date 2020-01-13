@@ -51,24 +51,32 @@ class App extends Component {
   render() {
     return (
       <>
-        <NavBar/>
-        <div>
-          <Router>
-            <Skeleton
-              path="/"
-              handleLogin={this.handleLogin}
-              handleLogout={this.handleLogout}
-              userId={this.state.userId}
-            />
+        {this.props.userId ? (
+          <>
+            <NavBar/>
+            <div>
+              <Router>
+                <Skeleton
+                  path="/"
+                  handleLogin={this.handleLogin}
+                  handleLogout={this.handleLogout}
+                  userId={this.state.userId}
+                />
+                <Welcome path="/welcome/"/>
+                <Studio
+                  path="/studio/"
+                />
+                <Profile path="/profile/"/>
+                <NotFound default />
+              </Router>
+            </div>
+          </>
+          
+        ) : (
+          <>
             <Welcome path="/welcome/"/>
-            <Studio
-              path="/studio/"
-            />
-            <Profile path="/profile/"/>
-            <NotFound default />
-          </Router>
-        </div>
-        
+          </>
+        )}
       </>
     );
   }
