@@ -4,6 +4,7 @@ import NotFound from "./pages/NotFound.js";
 import Skeleton from "./pages/Skeleton.js";
 import Studio from "./pages/Studio.js";
 import Profile from "./pages/Profile.js";
+import Welcome from "./pages/Welcome.js";
 
 import "../utilities.css";
 
@@ -59,6 +60,7 @@ class App extends Component {
               handleLogout={this.handleLogout}
               userId={this.state.userId}
             />
+            <Welcome path="/welcome/"/>
             <Studio
               path="/studio/"
             />
