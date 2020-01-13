@@ -74,7 +74,12 @@ class App extends Component {
           
         ) : (
           <>
-            <Welcome path="/welcome/"/>
+            <Welcome 
+              path="/"
+              handleLogin={this.handleLogin}
+              handleLogout={this.handleLogout}
+              userId={this.state.userId}
+            />
           </>
         )}
       </>

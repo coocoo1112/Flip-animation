@@ -1,7 +1,11 @@
 import React, { Component } from "react";
+import GoogleLogin, { GoogleLogout } from "react-google-login";
 
 import "../../utilities.css";
 import "./Welcome.css";
+
+//TODO: REPLACE WITH YOUR OWN CLIENT_ID
+const GOOGLE_CLIENT_ID = "121479668229-t5j82jrbi9oejh7c8avada226s75bopn.apps.googleusercontent.com";
 
 class Welcome extends React.Component {
     constructor(props) {
@@ -40,6 +44,13 @@ class Welcome extends React.Component {
         <>
           
           <div class="CanvasContainer">
+            <GoogleLogin
+              clientId={GOOGLE_CLIENT_ID}
+              buttonText="Login"
+              onSuccess={this.props.handleLogin}
+              onFailure={(err) => console.log(err)}
+              // color ="EDAB3A"
+            />
             <div class="welcomeText">Welcome To</div>
             <img src = {require("../../../../assets/flip_logo-2.png")} class="bigLogo"/>
             <div class="buttonContainer">
@@ -73,17 +84,6 @@ class FloatingCircle {
       this.height = this.width;
     }
 
-    // constructor(color, alpha, x, y, dx, dy, diameter) {
-    //   this.color = color;
-    //   this.alpha = alpha;
-    //   this.x = x;
-    //   this.y = y;
-    //   this.dx = dx;
-    //   this.dy = dy;
-    //   this.width = diameter;
-    //   this.height = diameter;
-    // }
-
     draw(ctx, canvas) {
       ctx.fillStyle = this.color;
       ctx.globalAlpha = this.alpha;
@@ -93,7 +93,6 @@ class FloatingCircle {
 
       this.x += this.dx;
       this.y += this.dy;
-      console.log(this.x + ", " + this.y);
 
       if (this.x > canvas.width + this.width) {
         this.x = -this.width;
@@ -108,19 +107,6 @@ class FloatingCircle {
         this.y = canvas.height + this.width;
       }
     }
-
-    // duplicate(x, y) {
-    //   const duplicate = new FloatingCircle(
-    //     this.color,
-    //     this.alpha,
-    //     this.x,
-    //     this.y,
-    //     this.dx,
-    //     this.dy,
-    //     this.width
-    //   )
-    //   return duplicate;
-    // }
 }
 
 class WelcomeAnimation extends React.Component {
@@ -149,4 +135,3 @@ class WelcomeAnimation extends React.Component {
 }
 
 export default WelcomeAnimation;
-// ReactDOM.render(<Animation />, document.body);
