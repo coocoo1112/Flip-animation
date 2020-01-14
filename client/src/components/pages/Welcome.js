@@ -13,14 +13,19 @@ class Welcome extends Component {
         this.state = {};
         this.canvasRef = React.createRef();
         this.logoRef = React.createRef();
-        this.circle1 = new FloatingCircle("#84AAAA");
-        this.circle2 = new FloatingCircle("#84AAAA");
-        this.circle3 = new FloatingCircle("#84AAAA");
-        this.circle4 = new FloatingCircle("#84AAAA");
+        this.circle1 = new FloatingCircle("#9EC2C2", 0.5);
+        this.circle2 = new FloatingCircle("#9EC2C2", 0.5);
+        this.circle3 = new FloatingCircle("#9EC2C2", 0.5);
+        this.circle4 = new FloatingCircle("#9EC2C2", 0.5);
         this.circle5 = new FloatingCircle("#EDAB3A", 0.5);
         this.circle6 = new FloatingCircle("#EDAB3A", 0.5);
         this.circle7 = new FloatingCircle("#EDAB3A", 0.5);
         this.circle8 = new FloatingCircle("#EDAB3A", 0.5);
+    }
+
+    componentDidMount() {
+      // remember -- api calls go here!
+      
     }
 
     componentDidUpdate() {
@@ -48,6 +53,7 @@ class Welcome extends Component {
           <div class="CanvasContainer">
             {this.props.userId ? (
               <GoogleLogout
+                className="GoogleBUtton"
                 clientId={GOOGLE_CLIENT_ID}
                 buttonText="Logout"
                 onLogoutSuccess={this.props.handleLogout}
@@ -55,6 +61,7 @@ class Welcome extends Component {
               />
             ) : (
               <GoogleLogin
+                className="GoogleButton"
                 clientId={GOOGLE_CLIENT_ID}
                 buttonText="Login"
                 onSuccess={this.props.handleLogin}
@@ -63,7 +70,7 @@ class Welcome extends Component {
             )}
             <div class="welcomeText">Welcome To</div>
             <img src = {require("../../../../assets/flip_logo-2.png")} class="bigLogo"/>
-            <div class="buttonContainer">
+            {/* <div class="buttonContainer">
               <div class="linkContainer">
                 <a 
                   class="goButton"
@@ -71,7 +78,7 @@ class Welcome extends Component {
                     Let's Get Started
                 </a>
               </div>
-            </div>
+            </div> */}
             
             <canvas width={innerWidth} height={innerHeight} ref={this.canvasRef} class="Canvas" />
             
