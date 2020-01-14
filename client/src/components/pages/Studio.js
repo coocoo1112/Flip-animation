@@ -32,7 +32,20 @@ class Studio extends React.Component {
         ctx.fillStyle = "White";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.beginPath();
-        canvas.addEventListener("pointerdown", (event) => {
+        // canvas.addEventListener("pointerdown", (event) => {
+        //   this.state.mouseDown = true;
+        //   ctx.beginPath();
+        //   this.state.mouse_coord.previous_x = null;
+        //   this.state.mouse_coord.previous_y = null;
+        // })
+        // canvas.addEventListener('pointerup', (event) => {
+        //   this.state.mouseDown = false;
+        // })
+        canvas.addEventListener('pointerleave', (event) => {
+          this.state.mouse_coord.previous_x = null;
+          this.state.mouse_coord.previous_y = null;
+        })
+        canvas.addEventListener('pointerdown', (event) => {
           this.state.mouseDown = true;
           ctx.beginPath();
           this.state.mouse_coord.previous_x = null;
@@ -41,16 +54,7 @@ class Studio extends React.Component {
         canvas.addEventListener('pointerup', (event) => {
           this.state.mouseDown = false;
         })
-        canvas.addEventListener('mousedown', (event) => {
-          this.state.mouseDown = true;
-          ctx.beginPath();
-          this.state.mouse_coord.previous_x = null;
-          this.state.mouse_coord.previous_y = null;
-        })
-        canvas.addEventListener('mouseup', (event) => {
-          this.state.mouseDown = false;
-        })
-        canvas.addEventListener('mousemove', (event) => {
+        canvas.addEventListener('pointermove', (event) => {
             const mouse = getMousePos(canvas, event);
             if (this.state.mouseDown){
               if ((this.state.mouse_coord.previous_x != null) && 
