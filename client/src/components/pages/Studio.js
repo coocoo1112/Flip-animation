@@ -13,6 +13,11 @@ function getMousePos(canvas, evt) {
     };
 }
 
+function changeColor(ctx, e) {
+  ctx.strokeStyle = e.target.id
+  console.log(e.target.id);
+}
+
 class Studio extends React.Component {
     constructor(props) {
         super(props);
@@ -22,15 +27,20 @@ class Studio extends React.Component {
            previous_y: null,
           },
           mouseDown: false,
+          color: "000000",
+          canvas: null,
         };
-        this.canvasRef = React.createRef();    
+        this.canvasRef = React.createRef();
+        this.canvas = null;
+        this.ctx = null;
     }
   
     componentDidMount() {
-        const canvas = this.canvasRef.current;
-        const ctx = canvas.getContext('2d');
+        this.canvas = this.canvasRef.current;
+        const ctx = this.canvas.getContext('2d');
+        this.ctx = ctx;
         ctx.fillStyle = "White";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         ctx.beginPath();
         // canvas.addEventListener("pointerdown", (event) => {
         //   this.state.mouseDown = true;
@@ -41,22 +51,23 @@ class Studio extends React.Component {
         // canvas.addEventListener('pointerup', (event) => {
         //   this.state.mouseDown = false;
         // })
-        canvas.addEventListener('pointerleave', (event) => {
+        // ctx.strokeStyle = "Red";
+        this.canvas.addEventListener('pointerleave', (event) => {
           this.state.mouse_coord.previous_x = null;
           this.state.mouse_coord.previous_y = null;
         })
-        canvas.addEventListener('pointerdown', (event) => {
+        this.canvas.addEventListener('pointerdown', (event) => {
           this.state.mouseDown = true;
           ctx.beginPath();
           this.state.mouse_coord.previous_x = null;
           this.state.mouse_coord.previous_y = null;
         })
-        canvas.addEventListener('pointerup', (event) => {
+        this.canvas.addEventListener('pointerup', (event) => {
           this.state.mouseDown = false;
         })
-        canvas.addEventListener('pointermove', (event) => {
+        this.canvas.addEventListener('pointermove', (event) => {
             console.log(event.buttons)
-            const mouse = getMousePos(canvas, event);
+            const mouse = getMousePos(this.canvas, event);
             
             if (this.state.mouseDown){
 
@@ -90,11 +101,15 @@ class Studio extends React.Component {
               <canvas width="700" height="500" ref={this.canvasRef} class="Canvas" />
               
             </div>
-            
+            <ToolNavBar
+              Colorchanger = {(e) => changeColor(this.ctx, e)}
+            />
         </>
       )
       
     }
+
+    
   }
   
 

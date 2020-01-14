@@ -31,7 +31,7 @@ body{
     margin-left: auto;
     margin-right: auto;
     /* margin: 10px; */
-    background-color: #C4C4C4;
+    background-color: var(--medgrey);
     height: 500px;
     width: 700px;
     border-radius: 20px;
@@ -45,7 +45,7 @@ body{
     margin-left: auto;
     margin-right: auto;
     /* margin: 10px; */
-    background-color: #737374;
+    background-color: var(--grey);
     height: 500px;
     width: 700px;
     border-radius: 20px;
@@ -59,7 +59,7 @@ body{
     margin-left: auto;
     margin-right: auto;
     /* margin: 10px; */
-    background-color: #FFDB9E;
+    background-color: var(--other-yellow);
     height: 500px;
     width: 700px;
     border-radius: 20px;
