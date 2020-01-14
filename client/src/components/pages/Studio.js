@@ -41,10 +41,10 @@ class Studio extends React.Component {
         // canvas.addEventListener('pointerup', (event) => {
         //   this.state.mouseDown = false;
         // })
-        canvas.addEventListener('pointerleave', (event) => {
-          this.state.mouse_coord.previous_x = null;
-          this.state.mouse_coord.previous_y = null;
-        })
+        // canvas.addEventListener('pointerleave', (event) => {
+        //   this.state.mouse_coord.previous_x = null;
+        //   this.state.mouse_coord.previous_y = null;
+        // })
         canvas.addEventListener('pointerdown', (event) => {
           this.state.mouseDown = true;
           ctx.beginPath();
