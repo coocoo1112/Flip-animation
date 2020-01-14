@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 import "../../utilities.css";
 import "./Studio.css";
+import ToolNavBar from "../modules/ToolNavBar.js"
 
 
 function getMousePos(canvas, evt) {
@@ -16,8 +17,11 @@ class Studio extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+          mouse_coord: {
            previous_x: null,
            previous_y: null,
+          },
+          mouseDown: false,
         };
         this.canvasRef = React.createRef();    
     }
@@ -28,18 +32,33 @@ class Studio extends React.Component {
         ctx.fillStyle = "White";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.beginPath();
+        canvas.addEventListener('mousedown', (event) => {
+          this.state.mouseDown = true;
+          ctx.beginPath();
+          this.state.mouse_coord.previous_x = null;
+          this.state.mouse_coord.previous_y = null;
+        })
+        canvas.addEventListener('mouseup', (event) => {
+          this.state.mouseDown = false;
+        })
         canvas.addEventListener('mousemove', (event) => {
             const mouse = getMousePos(canvas, event);
-            if ((this.state.previous_x != null) && (this.state.previous_x != mouse.x)) {
-              ctx.moveTo(this.state.previous_x, this.state.previous_y);
-              ctx.lineTo(mouse.x, mouse.y);
-              ctx.stroke(); 
-            }
-            if (this.state.previous_x != mouse.x){
-              this.setState({
-                previous_x: mouse.x,
-                previous_y: mouse.y,
-              });
+            if (this.state.mouseDown){
+              if ((this.state.mouse_coord.previous_x != null) && 
+              ((this.state.mouse_coord.previous_x != mouse.x) || (this.state.mouse_coord.previous_y != mouse.y))) {
+                ctx.moveTo(this.state.mouse_coord.previous_x, this.state.mouse_coord.previous_y);
+                ctx.lineTo(mouse.x, mouse.y);
+                ctx.stroke(); 
+              }
+              if ((this.state.mouse_coord.previous_x != mouse.x) || (this.state.mouse_coord.previous_y != mouse.y)){
+                this.setState({
+                  mouse_coord: {
+                    previous_x: mouse.x,
+                    previous_y: mouse.y,
+                  },
+                  mouseDown: this.state.mouseDown,
+                });
+              }
             }
         });
     }
@@ -48,8 +67,10 @@ class Studio extends React.Component {
       return (
         <>
             <div class="CanvasContainer">
-                <canvas width="700" height="500" ref={this.canvasRef} class="Canvas" />
+                <span><canvas width="700" height="400" ref={this.canvasRef} class="Canvas" /></span>
+                <span><ToolNavBar/></span>
             </div>
+            
         </>
       )
       

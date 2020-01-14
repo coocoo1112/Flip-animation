@@ -1,0 +1,51 @@
+.NavBar-container {
+    padding: var(--m);
+    background-color: var(--main-green);
+  }
+  
+  .NavBar-title {
+    color: var(--main-yellow);
+    font-size: 20px;
+  }
+  
+  .NavBar-linkContainer {
+    margin-left: var(--xl);
+    margin-top: var(--m);
+    vertical-align: top;
+  }
+  
+  .NavBar-link,
+  .NavBar-link:visited {
+    color: var(--white);
+    opacity: 0.6;
+    text-decoration: none;
+  }
+  
+  .NavBar-link:hover {
+    opacity: 0.8;
+  }
+  
+  .NavBar-link.NavBar-login {
+    opacity: 1;
+  }
+  
+  .NavBar-link + .NavBar-link {
+    margin-left: var(--xl);
+  }
+
+  #right {
+    background-color: aqua;
+    position: absolute;
+    right: 0px;
+    width: 10%;
+    height: 100px;
+    border: 3px solid #73AD21;
+    padding: 10px;
+    vertical-align: top;
+  }
+
+  .footer {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: space-around;
+  }
