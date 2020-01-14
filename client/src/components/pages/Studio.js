@@ -15,7 +15,11 @@ function getMousePos(canvas, evt) {
 class Studio extends React.Component {
     constructor(props) {
         super(props);
-        this.canvasRef = React.createRef();
+        this.state = {
+           previous_x: null,
+           previous_y: null,
+        };
+        this.canvasRef = React.createRef();    
     }
   
     componentDidMount() {
@@ -23,19 +27,20 @@ class Studio extends React.Component {
         const ctx = canvas.getContext('2d');
         ctx.fillStyle = "White";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-
-    }
-
-    componentDidUpdate() {
-        const canvas = this.canvasRef.current;
-        const ctx = canvas.getContext('2d');
-        canvas.addEventListener('mousemove', function(event) {
+        ctx.beginPath();
+        canvas.addEventListener('mousemove', (event) => {
             const mouse = getMousePos(canvas, event);
-            console.log(mouse.x + ", " + mouse.y);
-            ctx.fillStyle = "Black";
-            ctx.fillRect(mouse.x, mouse.y, 5, 5);
-            // ctx.fill();
+            if ((this.state.previous_x != null) && (this.state.previous_x != mouse.x)) {
+              ctx.moveTo(this.state.previous_x, this.state.previous_y);
+              ctx.lineTo(mouse.x, mouse.y);
+              ctx.stroke(); 
+            }
+            if (this.state.previous_x != mouse.x){
+              this.setState({
+                previous_x: mouse.x,
+                previous_y: mouse.y,
+              });
+            }
         });
     }
   
