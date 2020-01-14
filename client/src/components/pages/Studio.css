@@ -4,13 +4,65 @@ body{
 }
 
 .CanvasContainer {
-    text-align: center;
+    left:0;
+    right:0;
+    margin-left: 10%;
+    margin-right: auto;
     margin-top: var(--xl);
 
 }
 
 .Canvas {
+    position: absolute;
+    left:0;
+    right:0;
+    margin-left: auto;
+    margin-right: auto;
     border-color: var(--main-green);
-    border-style: solid;
+    border-style: none;
     border-width: var(--xs);
+    border-radius: 20px;
+}
+
+.Shadow1 {
+    position: absolute;
+    top: 140px;
+    left: 50px;
+    right:0;
+    margin-left: auto;
+    margin-right: auto;
+    /* margin: 10px; */
+    background-color: #C4C4C4;
+    height: 500px;
+    width: 700px;
+    border-radius: 20px;
+}
+
+.Shadow2 {
+    position: absolute;
+    top: 160px;
+    left: 100px;
+    right:0;
+    margin-left: auto;
+    margin-right: auto;
+    /* margin: 10px; */
+    background-color: #737374;
+    height: 500px;
+    width: 700px;
+    border-radius: 20px;
+}
+
+.Shadow3 {
+    position: absolute;
+    top: 80px;
+    left: -80px;
+    right:0;
+    margin-left: auto;
+    margin-right: auto;
+    /* margin: 10px; */
+    background-color: #FFDB9E;
+    height: 500px;
+    width: 700px;
+    border-radius: 20px;
+    transform: rotate(-6deg);
 }

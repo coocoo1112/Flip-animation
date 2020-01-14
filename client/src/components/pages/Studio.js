@@ -43,7 +43,11 @@ class Studio extends React.Component {
       return (
         <>
             <div class="CanvasContainer">
-                <canvas width="700" height="500" ref={this.canvasRef} class="Canvas" />
+              <div className="Shadow3"></div>
+              <div className="Shadow2"></div>
+              <div className="Shadow1"></div>
+              <canvas width="700" height="500" ref={this.canvasRef} class="Canvas" />
+              
             </div>
         </>
       )
