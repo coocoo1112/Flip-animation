@@ -55,10 +55,11 @@ class Studio extends React.Component {
           this.state.mouseDown = false;
         })
         canvas.addEventListener('pointermove', (event) => {
-
+            console.log(event.buttons)
             const mouse = getMousePos(canvas, event);
-            console.log(mouse.button)
+            
             if (this.state.mouseDown){
+
               if ((this.state.mouse_coord.previous_x != null) && 
               ((this.state.mouse_coord.previous_x != mouse.x) || (this.state.mouse_coord.previous_y != mouse.y))) {
                 ctx.moveTo(this.state.mouse_coord.previous_x, this.state.mouse_coord.previous_y);
