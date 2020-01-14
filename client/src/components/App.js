@@ -12,7 +12,6 @@ import { socket } from "../client-socket.js";
 
 import { get, post } from "../utilities";
 import NavBar from "./modules/NavBar.js";
-import Welcome2 from "./pages/Welcome2.js";
 
 /**
  * Define the "App" component as a class.
