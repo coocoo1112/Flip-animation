@@ -16,26 +16,34 @@ function getMousePos(canvas, evt) {
 
 function changeColor(ctx, e) {
   ctx.strokeStyle = e.target.id
-  console.log(e.target.id);
+  // console.log(e.target.id);
+}
+
+function sleep(milliseconds) {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+    currentDate = Date.now();
+  } while (currentDate - date < milliseconds);
 }
 
 function newFrame(state, canvas) {
-  console.log("New Frame");
+  // console.log("New Frame");
   state.frames[state.currentFrame] = (canvas.toDataURL("image/png"));
   state.frames.splice(state.currentFrame+1, 0, null);
   const ctx = canvas.getContext("2d");
   ctx.fillStyle = "White";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   state.currentFrame++;
-  console.log("length", state.frames.length);
-  console.log("current",state.currentFrame);
+  // console.log("length", state.frames.length);
+  // console.log("current",state.currentFrame);
 }
 
 function nextFrame(state, canvas, ctx) {
-  console.log("Next Frame");
+  // console.log("Next Frame");
   state.frames[state.currentFrame] = (canvas.toDataURL("image/png"));
-  console.log(state.currentFrame);
-  console.log(state.frames.length);
+  // console.log(state.currentFrame);
+  // console.log(state.frames.length);
   if (state.currentFrame == state.frames.length-1) {
     console.log("LAST PAGE CAN'T GO TO NEXT");
   } else {
@@ -44,7 +52,7 @@ function nextFrame(state, canvas, ctx) {
     const image = new Image();
     image.src = state.frames[state.currentFrame];
     
-    console.log(state.currentFrame);
+    // console.log(state.currentFrame);
     image.onload = function () {
       ctx.drawImage(image, 0, 0);
     }
@@ -53,7 +61,7 @@ function nextFrame(state, canvas, ctx) {
 }
 
 function previousFrame(state, canvas, ctx) {
-  console.log("Previous Frame");
+  // console.log("Previous Frame");
   state.frames[state.currentFrame] = (canvas.toDataURL("image/png"));
   if (state.currentFrame == 0) {
     console.log("FIRST PAGE CAN'T GO TO PREVIOUS");
@@ -63,11 +71,40 @@ function previousFrame(state, canvas, ctx) {
     const image = new Image();
     image.src = state.frames[state.currentFrame];
     
-    console.log(state.currentFrame);
+    // console.log(state.currentFrame);
     image.onload = function () {
       ctx.drawImage(image, 0, 0);
     }
     
+  }
+}
+
+function toFrame(state, canvas, e) {
+  state.frames[state.currentFrame] = (canvas.toDataURL("image/png"));
+  var targetFrame = e.target.id;
+  // console.log(targetFrame);
+  state.currentFrame = targetFrame;
+  const ctx = canvas.getContext("2d");
+  const image = new Image();
+  image.src = state.frames[state.currentFrame];
+  
+  // console.log(state.currentFrame);
+  image.onload = function () {
+    ctx.drawImage(image, 0, 0);
+  }
+}
+
+function playAnimation(state, canvas) {
+  const ctx = canvas.getContext("2d");
+  var i;
+  for (i = 0; i < state.frames.length; i++) {
+    console.log("frame", i)
+    const image = new Image();
+    image.src = state.frames[i];
+    // image.onload = function () {
+    ctx.drawImage(image, 0, 0);
+    // }
+    sleep(2000);
   }
 }
 
@@ -161,8 +198,14 @@ class Studio extends React.Component {
               <button onClick={() => previousFrame(this.state, this.canvas, this.ctx)}>Previous</button>
               <button onClick={() => nextFrame(this.state, this.canvas, this.ctx)}>Next</button>
               <button onClick={() => newFrame(this.state, this.canvas)}>New Frame</button>
+              <button onClick={() => playAnimation(this.state, this.canvas)}>Play</button>
             </div>
-            <ThumbnailBar className="Thumbnails"/>
+            <ThumbnailBar 
+              className="Thumbnails"
+              numFrames={this.state.frames.length}
+              currentFrame = {this.state.currentFrame}
+              frameChanger = {(e) => toFrame(this.state, this.canvas, e)}
+            />
             <ToolNavBar
               Colorchanger = {(e) => changeColor(this.ctx, e)}
             />
