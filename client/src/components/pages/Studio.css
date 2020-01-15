@@ -3,12 +3,20 @@ body{
     background-color: var(--light-yellow);
 }
 
+.projectName {
+    position: absolute;
+    top:0;
+
+    text-align: center;
+}
+
 .CanvasContainer {
     left:0;
     right:0;
-    margin-left: 10%;
+    margin-left: 0;
     margin-right: auto;
     margin-top: var(--xl);
+    background-color: red;
 }
 
 .Canvas {
@@ -17,9 +25,6 @@ body{
     right:0;
     margin-left: auto;
     margin-right: auto;
-    border-color: var(--main-green);
-    border-style: none;
-    border-width: var(--xs);
     border-radius: 20px;
 }
 

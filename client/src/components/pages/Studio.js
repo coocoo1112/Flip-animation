@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import "../../utilities.css";
 import "./Studio.css";
 import ToolNavBar from "../modules/ToolNavBar.js"
+import ThumbnailBar from "../modules/ThumbnailBar.js"
 
 
 function getMousePos(canvas, evt) {
@@ -18,6 +19,58 @@ function changeColor(ctx, e) {
   console.log(e.target.id);
 }
 
+function newFrame(state, canvas) {
+  console.log("New Frame");
+  state.frames[state.currentFrame] = (canvas.toDataURL("image/png"));
+  state.frames.splice(state.currentFrame+1, 0, null);
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = "White";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  state.currentFrame++;
+  console.log("length", state.frames.length);
+  console.log("current",state.currentFrame);
+}
+
+function nextFrame(state, canvas, ctx) {
+  console.log("Next Frame");
+  state.frames[state.currentFrame] = (canvas.toDataURL("image/png"));
+  console.log(state.currentFrame);
+  console.log(state.frames.length);
+  if (state.currentFrame == state.frames.length-1) {
+    console.log("LAST PAGE CAN'T GO TO NEXT");
+  } else {
+    state.currentFrame++;
+    const ctx = canvas.getContext("2d");
+    const image = new Image();
+    image.src = state.frames[state.currentFrame];
+    
+    console.log(state.currentFrame);
+    image.onload = function () {
+      ctx.drawImage(image, 0, 0);
+    }
+    
+  }
+}
+
+function previousFrame(state, canvas, ctx) {
+  console.log("Previous Frame");
+  state.frames[state.currentFrame] = (canvas.toDataURL("image/png"));
+  if (state.currentFrame == 0) {
+    console.log("FIRST PAGE CAN'T GO TO PREVIOUS");
+  } else {
+    state.currentFrame--;
+    const ctx = canvas.getContext("2d");
+    const image = new Image();
+    image.src = state.frames[state.currentFrame];
+    
+    console.log(state.currentFrame);
+    image.onload = function () {
+      ctx.drawImage(image, 0, 0);
+    }
+    
+  }
+}
+
 class Studio extends React.Component {
     constructor(props) {
         super(props);
@@ -29,6 +82,8 @@ class Studio extends React.Component {
           mouseDown: false,
           color: "000000",
           canvas: null,
+          currentFrame: 0,
+          frames: [null],
         };
         this.canvasRef = React.createRef();
         this.canvas = null;
@@ -66,7 +121,7 @@ class Studio extends React.Component {
           this.state.mouseDown = false;
         })
         this.canvas.addEventListener('pointermove', (event) => {
-            console.log(event.buttons)
+            // console.log(event.buttons)
             const mouse = getMousePos(this.canvas, event);
             
             if (this.state.mouseDown){
@@ -93,6 +148,7 @@ class Studio extends React.Component {
     render() {
       return (
         <>
+            {/* <div className="projectName">Project Title</div> */}
             <div class="CanvasContainer">
                 
               <div className="Shadow3"></div>
@@ -101,6 +157,12 @@ class Studio extends React.Component {
               <canvas width="700" height="500" ref={this.canvasRef} class="Canvas" />
               
             </div>
+            <div>
+              <button onClick={() => previousFrame(this.state, this.canvas, this.ctx)}>Previous</button>
+              <button onClick={() => nextFrame(this.state, this.canvas, this.ctx)}>Next</button>
+              <button onClick={() => newFrame(this.state, this.canvas)}>New Frame</button>
+            </div>
+            <ThumbnailBar className="Thumbnails"/>
             <ToolNavBar
               Colorchanger = {(e) => changeColor(this.ctx, e)}
             />
