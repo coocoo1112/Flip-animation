@@ -29,8 +29,16 @@ class Studio extends React.Component {
     componentDidMount() {
         const canvas = this.canvasRef.current;
         const ctx = canvas.getContext('2d');
+        //ctx.scale(2,2)
+        const scale = 1;
+        
+        // canvas.width = 1400;
+        // canvas.height = 1000;
+        // canvas.style.width = "700px";
+        // canvas.style.height = "500px";
         ctx.fillStyle = "White";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+
         ctx.beginPath();
         // canvas.addEventListener("pointerdown", (event) => {
         //   this.state.mouseDown = true;
@@ -61,16 +69,17 @@ class Studio extends React.Component {
             if (this.state.mouseDown){
 
               if ((this.state.mouse_coord.previous_x != null) && 
-              ((this.state.mouse_coord.previous_x != mouse.x) || (this.state.mouse_coord.previous_y != mouse.y))) {
+              ((this.state.mouse_coord.previous_x != mouse.x * scale) || (this.state.mouse_coord.previous_y != mouse.y * scale))) {
+                ctx.strokeStyle = 'Red'
                 ctx.moveTo(this.state.mouse_coord.previous_x, this.state.mouse_coord.previous_y);
-                ctx.lineTo(mouse.x, mouse.y);
+                ctx.lineTo(mouse.x * scale, mouse.y * scale);
                 ctx.stroke(); 
               }
-              if ((this.state.mouse_coord.previous_x != mouse.x) || (this.state.mouse_coord.previous_y != mouse.y)){
+              if ((this.state.mouse_coord.previous_x != mouse.x * scale) || (this.state.mouse_coord.previous_y != mouse.y * scale)){
                 this.setState({
                   mouse_coord: {
-                    previous_x: mouse.x,
-                    previous_y: mouse.y,
+                    previous_x: mouse.x * scale,
+                    previous_y: mouse.y * scale,
                   },
                   mouseDown: this.state.mouseDown,
                 });
