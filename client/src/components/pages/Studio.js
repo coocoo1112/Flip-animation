@@ -30,6 +30,7 @@ function sleep(milliseconds) {
 function newFrame(state, canvas) {
   // console.log("New Frame");
   state.frames[state.currentFrame] = (canvas.toDataURL("image/png"));
+
   state.frames.splice(state.currentFrame+1, 0, null);
   const ctx = canvas.getContext("2d");
   ctx.fillStyle = "White";
@@ -79,10 +80,10 @@ function previousFrame(state, canvas, ctx) {
   }
 }
 
-function toFrame(state, canvas, e) {
+function toFrame(state, canvas, index) {
   state.frames[state.currentFrame] = (canvas.toDataURL("image/png"));
-  var targetFrame = e.target.id;
-  // console.log(targetFrame);
+  var targetFrame = index;
+  console.log("change to frame", targetFrame);
   state.currentFrame = targetFrame;
   const ctx = canvas.getContext("2d");
   const image = new Image();
@@ -94,19 +95,21 @@ function toFrame(state, canvas, e) {
   }
 }
 
-function playAnimation(state, canvas) {
-  const ctx = canvas.getContext("2d");
-  var i;
-  for (i = 0; i < state.frames.length; i++) {
-    console.log("frame", i)
-    const image = new Image();
-    image.src = state.frames[i];
-    // image.onload = function () {
-    ctx.drawImage(image, 0, 0);
-    // }
-    sleep(2000);
-  }
-}
+// function playAnimation(state, canvas) {
+//   // const ctx = canvas.getContext("2d");
+//   // var i;
+//   // for (i = 0; i < state.frames.length; i++) {
+//   //   console.log("frame", i)
+//   //   const image = new Image();
+//   //   image.src = state.frames[i];
+//   //   // image.onload = function () {
+//   //   ctx.drawImage(image, 0, 0);
+//   //   // }
+//   //   sleep(2000);
+//   // }
+//   // var img = document.getElementById("imageTest");
+//   // img.src = require("../../../../assets/flip_logo_small.png");
+// }
 
 class Studio extends React.Component {
     constructor(props) {
@@ -121,6 +124,7 @@ class Studio extends React.Component {
           canvas: null,
           currentFrame: 0,
           frames: [null],
+          frameURLs: [null],
         };
         this.canvasRef = React.createRef();
         this.canvas = null;
@@ -198,13 +202,16 @@ class Studio extends React.Component {
               <button onClick={() => previousFrame(this.state, this.canvas, this.ctx)}>Previous</button>
               <button onClick={() => nextFrame(this.state, this.canvas, this.ctx)}>Next</button>
               <button onClick={() => newFrame(this.state, this.canvas)}>New Frame</button>
-              <button onClick={() => playAnimation(this.state, this.canvas)}>Play</button>
+              {/* <button onClick={() => playAnimation(this.state, this.canvas)}>
+                <img id="imageTest" src={this.state.frames[0]}/>
+              </button> */}
             </div>
             <ThumbnailBar 
               className="Thumbnails"
               numFrames={this.state.frames.length}
               currentFrame = {this.state.currentFrame}
-              frameChanger = {(e) => toFrame(this.state, this.canvas, e)}
+              FrameChanger = {(index) => toFrame(this.state, this.canvas, index)}
+              frames = {this.state.frames}
             />
             <ToolNavBar
               Colorchanger = {(e) => changeColor(this.ctx, e)}
