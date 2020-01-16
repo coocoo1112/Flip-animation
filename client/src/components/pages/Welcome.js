@@ -24,7 +24,7 @@ class Welcome extends Component {
     }
 
     componentDidMount() {
-      // remember -- api calls go here!
+      // remember -- api calls go here!\
       
     }
 
@@ -147,7 +147,7 @@ class WelcomeAnimation extends React.Component {
     }
   
     render() {
-      return <Welcome/>;
+      return <Welcome handleLogin={this.props.handleLogin} handleLogout = {this.props.handleLogout}/>;
     }
 }
 
