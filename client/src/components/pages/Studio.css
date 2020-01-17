@@ -10,63 +10,8 @@ body{
     text-align: center;
 }
 
-.CanvasContainer {
-    left:0;
-    right:0;
-    margin-left: 0;
-    margin-right: auto;
-    margin-top: var(--xl);
-    background-color: red;
-}
-
-.Canvas {
-    position: absolute;
-    left:0;
-    right:0;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 20px;
-}
-
-.Shadow1 {
-    position: absolute;
-    top: 140px;
-    left: 50px;
-    right:0;
-    margin-left: auto;
-    margin-right: auto;
-    /* margin: 10px; */
-    background-color: var(--medgrey);
-    height: 500px;
-    width: 700px;
-    border-radius: 20px;
-}
-
-.Shadow2 {
-    position: absolute;
-    top: 160px;
-    left: 100px;
-    right:0;
-    margin-left: auto;
-    margin-right: auto;
-    /* margin: 10px; */
-    background-color: var(--grey);
-    height: 500px;
-    width: 700px;
-    border-radius: 20px;
-}
-
-.Shadow3 {
-    position: absolute;
-    top: 80px;
-    left: -80px;
-    right:0;
-    margin-left: auto;
-    margin-right: auto;
-    /* margin: 10px; */
-    background-color: var(--other-yellow);
-    height: 500px;
-    width: 700px;
-    border-radius: 20px;
-    transform: rotate(-6deg);
+.filpCanvas {
+    position: relative;
+    /* text-align: center; */
+    /* left: 100px; */
 }

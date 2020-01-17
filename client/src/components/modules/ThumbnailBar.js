@@ -1,21 +1,28 @@
 import React, { Component } from "react";
-import { Link } from "@reach/router";
+import Thumbnail from "./Thumbnail.js"
 
-import { get, post } from "../../utilities";
 import "./ThumbnailBar.css";
-
 
 class ThumbnailBar extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
   }
 
   render() {
-    return (
+    let thumbnails = this.props.frames.map((frameObj, i) => (
+      <Thumbnail
+        key = {i}
+        frame = {frameObj}
+        currentFrame = {(i == this.props.currentFrame)}
+        FrameChanger = {() => this.props.FrameChanger(i)}
+        id = {i}
+      />
+    ))
     
-    <div className="HorizontalScroller">
-    </div>
+    return (
+      <div className="HorizontalScroller" ref={this.containerRef}>
+        {thumbnails}
+      </div>
     );
   }
 }
