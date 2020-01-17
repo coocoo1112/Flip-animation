@@ -29,9 +29,13 @@ class NavBar extends Component {
           <Link to="/studio/" className="NavBar-link">
               Studio
           </Link>
-          <Link to="/profile/" className="NavBar-link">
-            Profile
+          <Link to="/profile/" className="NavBar-link profile-link">
+          
+            <img className="profileIcon" src={require("../../../../assets/profile_icon.png")}/>
           </Link>
+          {/* <a>
+            <img className="profileIcon" src={require("../../../../assets/profile_icon.png")}/>
+          </a> */}
         </div>
       </nav>
     );

@@ -10,7 +10,7 @@
   
   .NavBar-linkContainer {
     margin-left: var(--xl);
-    margin-top: var(--m);
+    /* margin-top: var(--m); */
     vertical-align: top;
   }
   
@@ -32,4 +32,12 @@
   .NavBar-link + .NavBar-link {
     margin-left: var(--xl);
   }
+
+  .profileIcon {
+    width: 7%;
+    margin: 0;
+  }
   
+  .profile-link {
+    right: 0;
+  }
