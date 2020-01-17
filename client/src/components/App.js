@@ -11,6 +11,7 @@ import { socket } from "../client-socket.js";
 
 import { get, post } from "../utilities";
 import NavBar from "./modules/NavBar.js";
+import ToolNavBar from "./modules/ToolNavBar.js";
 
 /**
  * Define the "App" component as a class.
@@ -63,6 +64,8 @@ class App extends Component {
               path="/studio/"
             />
             <Profile path="/profile/"/>
+            <ToolNavBar path="/toolBar/"/>
+            <NavBar path="nav"/>
             <NotFound default />
           </Router>
         </div>
