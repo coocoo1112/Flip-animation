@@ -12,7 +12,7 @@ const express = require("express");
 // import models so we can interact with the database
 const User = require("./models/user");
 const Frame = require("./models/frame");
-const Project = require("./models/profile")
+const Project = require("./models/project")
 
 // import authentication library
 const auth = require("./auth");
@@ -46,10 +46,25 @@ router.post("/initsocket", (req, res) => {
 
 // anything else falls to this "not found" case
 router.post("/sendFrame", auth.ensureLoggedIn, (req, res) => {
-    const newFrame = new Frame({
-      
+    const newFrame = new Frame({ 
     });
 })
+
+router.post("/newProject", auth.ensureLoggedIn, (req, res) => {
+    const newProject = new Project({
+      name: req.body.name,
+      user: req.user._id,
+    });
+    newProject.save().then((project) => res.send(project));
+})
+
+router.get("/getNumProjects", (req, res) => {
+  Project.find({ user: req.user._id }).then((projects) => {
+    var len = projects.length
+    console.log(len)
+    res.send({len})});
+})
+
 
 router.all("*", (req, res) => {
   console.log(`API route not found: ${req.method} ${req.url}`);
