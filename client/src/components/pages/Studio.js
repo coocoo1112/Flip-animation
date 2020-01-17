@@ -81,12 +81,18 @@ function toFrame(state, canvas, index) {
 
 class Studio extends React.Component {
     constructor(props) {
-        super(props);
-        this.state = {
+      super(props);
+      this.state = {
+          mouse_coord: {
+           previous_x: null,
+           previous_y: null,
+          },
           mouseDown: false,
           color: "000000",
           canvas: null,
           currentFrame: 0,
+          frames: [null],
+          frameURLs: [null],
         };
         this.canvasRef = React.createRef();
         this.canvas = null;
@@ -99,15 +105,6 @@ class Studio extends React.Component {
     render() {
       return (
         <>
-            {/* <div className="projectName">Project Title</div> */}
-            {/* <div class="CanvasContainer">
-                
-              <div className="Shadow3"></div>
-              <div className="Shadow2"></div>
-              <div className="Shadow1"></div>
-              <canvas width="700" height="500" ref={this.canvasRef} class="Canvas" />
-              
-            </div> */}
             <FlipCanvas
               className="flipCanvas"
             />
