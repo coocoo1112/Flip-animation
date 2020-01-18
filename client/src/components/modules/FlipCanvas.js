@@ -19,15 +19,14 @@ class FlipCanvas extends Component {
              previous_y: null,
             },
             mouseDown: false,
-            color: "000000",
+            // color: "000000",
             canvas: null,
-            currentFrame: 0,
-            frames: [null],
-            frameURLs: [null],
-          };
-          this.canvasRef = React.createRef();
-          this.canvas = null;
-          this.ctx = null;
+            // frames: [null],
+            // frameURLs: [null],
+        };
+        this.canvasRef = React.createRef();
+        this.canvas = null;
+        this.ctx = null;
     }
 
     componentDidMount() {
@@ -37,6 +36,7 @@ class FlipCanvas extends Component {
         ctx.fillStyle = "White";
         ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         ctx.beginPath();
+        
         this.canvas.addEventListener('pointerleave', (event) => {
           this.state.mouse_coord.previous_x = null;
           this.state.mouse_coord.previous_y = null;
@@ -52,8 +52,9 @@ class FlipCanvas extends Component {
         })
         this.canvas.addEventListener('pointermove', (event) => {
             // console.log(event.buttons)
+            // console.log(this.props.color);
             const mouse = getMousePos(this.canvas, event);
-            
+            ctx.strokeStyle = this.props.color;
             if (this.state.mouseDown){
 
               if ((this.state.mouse_coord.previous_x != null) && 
@@ -75,7 +76,67 @@ class FlipCanvas extends Component {
         });
     }
 
+    loadFrame = (frame) => {
+        const image = new Image();
+        const ctx = this.canvas.getContext("2d");
+        console.log("draw frame", frame);
+        // console.log(this.props.frames[this.props.currentFrame]);
+        if (this.props.frames[frame]) {
+            image.src = this.props.frames[frame];
+            console.log(image.src);
+            image.onload = function () {
+                ctx.drawImage(image, 0, 0);
+                // ctx.fillStyle = "red";
+                // ctx.fillRect(0, 0, 300, 300);
+            }
+        }
+        // this.ctx.fillStyle = "red";
+        // this.ctx.fillRect(0,0, this.canvas.width, this.canvas.height);
+    }
+
+    blankCanvas() {
+        this.ctx.fillStyle = "White";
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+
+    componentDidUpdate() {
+        this.ctx.strokeStyle = this.props.color;
+        // console.log("saving");
+        
+
+        if (this.props.save) {
+            console.log("save");
+            this.props.saveFrame(this.canvas);
+        }
+        // console.log(this.props.currentFrame);
+        // console.log(this.state.currentFrame);
+        if (this.props.newFrame) {
+            console.log("newFrame");
+            // console.log("test worked");
+            // this.props.newFrame = false;
+            this.blankCanvas();
+            this.props.setNewFrameFalse();
+            this.setState({
+                currentFrame: this.props.currentFrame,
+            })
+            // console.log(this.props.newFrame);
+        }
+
+        // if (this.props.currentFrame != this.state.currentFrame) {
+        //     this.loadFrame();
+        //     this.setState({
+        //         currentFrame: this.props.currentFrame,
+        //     })
+        // }
+        if (this.props.changeFrame) {
+            this.loadFrame(this.props.currentFrame);
+            this.props.setChangeFrameFalse();
+        }
+        // this.props.save(this.canvas);
+    }
+
     render() {
+        console.log("currentFrame", this.props.currentFrame);
         return (
             <div class="CanvasContainer">
                 
@@ -91,29 +152,38 @@ class FlipCanvas extends Component {
 
 
 
-class FlipCanvasAnimation extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { angle: 0 };
-        this.updateAnimationState = this.updateAnimationState.bind(this);
-    }
+// class FlipCanvasAnimation extends Component {
+//     constructor(props) {
+//         super(props);
+//         this.state = { angle: 0 };
+//         this.updateAnimationState = this.updateAnimationState.bind(this);
+//     }
 
-    componentDidMount() {
-        this.rAF = requestAnimationFrame(this.updateAnimationState);
-    }
+//     componentDidMount() {
+//         this.rAF = requestAnimationFrame(this.updateAnimationState);
+//     }
 
-    updateAnimationState() {
-        this.setState(prevState => ({ angle: prevState.angle + 1 }));
-        this.rAF = requestAnimationFrame(this.updateAnimationState);
-    }
+//     updateAnimationState() {
+//         this.setState(prevState => ({ angle: prevState.angle + 1 }));
+//         this.rAF = requestAnimationFrame(this.updateAnimationState);
+//     }
 
-    componentWillUnmount() {
-        cancelAnimationFrame(this.rAF);
-    }
+//     componentWillUnmount() {
+//         cancelAnimationFrame(this.rAF);
+//     }
 
-    render() {
-        return <FlipCanvas/>;
-    }
-}
+//     // componentDidUpdate() {
+//     //     console.log("Change color to",this.props.color);
+//     // }
 
-export default FlipCanvasAnimation;
+//     render() {
+//         return (
+//             <FlipCanvas
+//                 color = {this.props.color}
+//                 save = {this.props.save}
+//             />)
+//         ;
+//     }
+// }
+
+export default FlipCanvas;
