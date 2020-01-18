@@ -11,10 +11,10 @@ function addProject() {
   var nameEntered = prompt("enter the name of your project")
   get("/api/whoami").then((user) => {
     const who = user.googleid;
-    console.log(who);
+    //console.log(who);
     const body = {user: who};
     get("/api/getNumProjects", body).then((result) => {
-      console.log(result.len);
+      //console.log(result.len);
       const len = result.len;
       const projectBody = {
         name: nameEntered,
