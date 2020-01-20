@@ -76,13 +76,13 @@ class FlipCanvas extends Component {
         });
     }
 
-    loadFrame = (frame) => {
+    loadFrame = (frameNumber) => {
         const image = new Image();
         const ctx = this.canvas.getContext("2d");
-        console.log("draw frame", frame);
-        // console.log(this.props.frames[this.props.currentFrame]);
-        if (this.props.frames[frame]) {
-            image.src = this.props.frames[frame];
+        console.log("draw frame", frameNumber);
+        console.log(this.props.frames[frameNumber]);
+        if (this.props.frames[frameNumber]) {
+            image.src = this.props.frames[frameNumber];
             console.log(image.src);
             image.onload = function () {
                 ctx.drawImage(image, 0, 0);
@@ -101,41 +101,61 @@ class FlipCanvas extends Component {
 
     componentDidUpdate() {
         this.ctx.strokeStyle = this.props.color;
-        // console.log("saving");
         
-
-        if (this.props.save) {
-            console.log("save");
-            this.props.saveFrame(this.canvas);
-        }
-        // console.log(this.props.currentFrame);
-        // console.log(this.state.currentFrame);
         if (this.props.newFrame) {
-            console.log("newFrame");
-            // console.log("test worked");
-            // this.props.newFrame = false;
+            console.log("NEW FRAME");
+            console.log("save image at", this.props.currentFrame-1);
+            this.props.saveFrame(this.canvas, this.props.currentFrame-1);
             this.blankCanvas();
             this.props.setNewFrameFalse();
-            // console.log(this.props.newFrame);
         }
 
-        // if (this.props.currentFrame != this.state.currentFrame) {
-        //     this.loadFrame();
-        //     this.setState({
-        //         currentFrame: this.props.currentFrame,
-        //     })
-        // }
-        if (this.props.changeFrame) {
+        if (this.props.goPrevFrame) {
+            console.log("PREVIOUS FRAME");
+            this.props.saveFrame(this.canvas, this.props.currentFrame+1);
             this.loadFrame(this.props.currentFrame);
-            this.props.setChangeFrameFalse();
+            this.props.setPreviousFrameFalse();
         }
+
+        if (this.props.goNextFrame) {
+            console.log("NEXT FRAME");
+            this.props.saveFrame(this.canvas, this.props.currentFrame-1);
+            this.loadFrame(this.props.currentFrame);
+            this.props.setNextFrameFalse();
+        }
+
+        // if (this.props.save) {
+        //     console.log("save");
+        //     this.props.saveFrame(this.canvas);
+        // }
+        // // console.log(this.props.currentFrame);
+        // // console.log(this.state.currentFrame);
+        // if (this.props.newFrame) {
+        //     console.log("newFrame");
+        //     // console.log("test worked");
+        //     // this.props.newFrame = false;
+        //     this.blankCanvas();
+        //     this.props.setNewFrameFalse();
+        //     // console.log(this.props.newFrame);
+        // }
+
+        // // if (this.props.currentFrame != this.state.currentFrame) {
+        // //     this.loadFrame();
+        // //     this.setState({
+        // //         currentFrame: this.props.currentFrame,
+        // //     })
+        // // }
+        // if (this.props.changeFrame) {
+        //     this.loadFrame(this.props.currentFrame);
+        //     this.props.setChangeFrameFalse();
+        // }
 
         // this.props.setNextFrame();
         // this.props.save(this.canvas);
     }
 
     render() {
-        console.log("currentFrame", this.props.currentFrame);
+        console.log("frames", this.props.frames);
         return (
             <div class="CanvasContainer">
                 
