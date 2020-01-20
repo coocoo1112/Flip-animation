@@ -5,12 +5,25 @@ import "./Studio.css";
 import FlipCanvas from "../modules/FlipCanvas.js";
 import ToolNavBar from "../modules/ToolNavBar.js";
 import ThumbnailBar from "../modules/ThumbnailBar.js";
+import { get, post } from "../../utilities.js"
 
-// function changeColor(state, e) {
-  
-//   // state.color = e.target.id
-  
-// }
+function addProject() {
+  var nameEntered = prompt("enter the name of your project")
+  get("/api/whoami").then((user) => {
+    const who = user.googleid;
+    //console.log(who);
+    const body = {user: who};
+    get("/api/getNumProjects", body).then((result) => {
+      //console.log(result.len);
+      const len = result.len;
+      const projectBody = {
+        name: nameEntered,
+        user: who
+      };
+      post("/api/newProject", projectBody)
+    });
+  });
+}
 
 function sleep(milliseconds) {
   const date = Date.now();
@@ -208,6 +221,7 @@ class Studio extends React.Component {
             <ToolNavBar
               Colorchanger = {(e) => this.changeColor(e)}
             />
+            <button onClick={() => addProject()}>add project</button>
         </>
       )
       
