@@ -59,7 +59,7 @@ function login(req, res) {
       //        console.log("Bucket exists and we have access");
       //    }
       // });
-      console.log(bucketFolder.Key)
+      //console.log(bucketFolder.Key)
       res.send(user);
     })
     .catch((err) => {

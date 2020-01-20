@@ -43,22 +43,53 @@ import { get, post } from "../../utilities.js";
 // when adding frames each frame will be linked to a project and user
 //in mongoose from which we can get the filename of the file in S3
 function addProject() {
-  var nameEntered = prompt("enter the name of your project")
-  get("/api/whoami").then((user) => {
-    const who = user.googleid;
-    //console.log(who);
-    const body = {user: who};
-    get("/api/getNumProjects", body).then((result) => {
-      //console.log(result.len);
-      const len = result.len;
-      const projectBody = {
-        name: nameEntered,
-        user: who
-      };
-      post("/api/newProject", projectBody)
-    });
+  var nameEntered = prompt("enter the name of your project");
+  get('/api/validateProjectName', { name: nameEntered}).then((out) => {
+    if (out) {
+      get("/api/whoami").then((user) => {
+        const who = user.googleid;
+        //console.log(who);
+        const body = {user: who};
+        get("/api/getNumProjects", body).then((result) => {
+          //console.log(result.len);
+          const len = result.len;
+          const projectBody = {
+            name: nameEntered,
+            user: who
+          };
+          post("/api/newProject", projectBody)
+        });
+      });
+    }
+    else {
+      console.log("name taken");
+    }
+  })
+    
+}
+
+function getFrames(state) {
+  get("/api/getFrames", { project: state.project}).then((frames) => console.log(frames));
+}
+
+function getProjects() {
+  get("/api/getProjects").then((projects) => console.log(projects))
+}
+
+function testNameCheck(inp) {
+  //console.log("test");
+  const body = { name: inp };
+  //console.log(body);
+  get("/api/validateProjectName", body).then((output) => {
+    console.log(output);
+    return output
   });
 }
+
+function saveFrame() {
+  
+}
+
 function changeColor(ctx, e) {
   ctx.strokeStyle = e.target.id
 }
@@ -84,15 +115,17 @@ function newFrame(state, canvas) {
 function nextFrame(state, canvas, ctx) {
   //var uri = canvas.toDataURL("image/png")
   //state.frames[state.currentFrame] = (uri);
-  
-  //var buf = __dirname+"flip_logo_small.png";//new Buffer(uri, 'base64');
+  //console.log(uri);
+  // var buf = __dirname+"flip_logo_small.png";//new Buffer(uri, 'base64');
   // const fs = require("fs");
   // var fileStream = fs.createReadStream("flip_logo_small.png");
-  //console.log(fileStream);
+  // console.log(fileStream);
   var params = {
     project: state.project,
   }
-  get("/api/getFrames")
+  post("/api/sendFrame", params).then((frame) => {
+    console.log(frame);
+  })
   //post("/fileToS3", params).then((result) => console.log(result));
 
   // if (state.currentFrame == state.frames.length-1) {
@@ -128,6 +161,8 @@ function previousFrame(state, canvas, ctx) {
   }
 }
 
+
+
 function toFrame(state, canvas, index) {
   state.frames[state.currentFrame] = (canvas.toDataURL("image/png"));
   var targetFrame = index;
@@ -157,7 +192,7 @@ class Studio extends React.Component {
           currentFrame: 0,
           frames: [null],
           frameURLs: [null],
-          project: "test",
+          project: "test1",
         };
         this.canvasRef = React.createRef();
         this.canvas = null;
@@ -190,6 +225,7 @@ class Studio extends React.Component {
             <ToolNavBar
               Colorchanger = {(e) => changeColor(this.ctx, e)}
             />
+            <button onClick={() => getFrames(this.state)}>test</button>
             <button onClick={() => addProject()}>add project</button>
         </>
       )

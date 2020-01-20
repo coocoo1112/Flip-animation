@@ -41,7 +41,7 @@ function doesUserExist(user) {
   });
 }
 
-router.post("/login", auth.login, (req,res) => {
+router.post("/login", auth.login);//, (req,res) => {
   // console.log("test");
   // const bucketFolder = {
   //   Bucket : 'wholesome-heavies',
@@ -57,7 +57,7 @@ router.post("/login", auth.login, (req,res) => {
   //        console.log("Bucket exists and we have access");
   //    }
   // });
-});
+//});
 router.post("/logout", auth.logout);
 router.get("/whoami", (req, res) => {
   if (!req.user) {
@@ -82,8 +82,35 @@ router.post("/initsocket", (req, res) => {
 
 // anything else falls to this "not found" case
 router.post("/sendFrame", auth.ensureLoggedIn, (req, res) => {
-    const newFrame = new Frame({ 
+  var buf = __dirname+"/flip_logo_small.png";//new Buffer(uri, 'base64');
+  const fs = require("fs");
+  var fileStream = fs.createReadStream(buf);
+  //console.log(fileStream);
+  uploadParams.Body = fileStream;
+  const newFrame = new Frame({ 
+    user: req.user._id,
+    projectId: req.body.project,
+    link: null,
+  });
+  
+  newFrame.save().then((frame) => {
+    const link = req.user._id + "/" + req.body.project + "/" + frame._id + ".png";
+    uploadParams.Key = link
+    console.log(uploadParams);
+    newFrame.link = link
+    console.log(frame._id);
+    newFrame.save().then((frame) => console.log(frame._id));
+    s3.upload (uploadParams, function (err, data) {
+      console.log("test");
+      if (err) {
+        console.log("Error", err);
+      } if (data) {
+        //res.send(data.Location)
+        console.log("Upload Success", data.Location);
+      }
     });
+    res.send(frame._id)
+  });
 })
 
 router.post("/newProject", auth.ensureLoggedIn, (req, res) => {
@@ -95,12 +122,6 @@ router.post("/newProject", auth.ensureLoggedIn, (req, res) => {
 })
 
 router.post("/fileToS3", auth.ensureLoggedIn, (req, res) => {
-    //var file = req.body.fileName;
-    //var fileStream = fs.createReadStream(file);
-    // fileStream.on('error', function(err) {
-    //   console.log('File Error', err);
-    // });
-
     uploadParams.Body = req.body.buffer;
     var path = require('path');
     id = "abcd";
@@ -116,7 +137,28 @@ router.post("/fileToS3", auth.ensureLoggedIn, (req, res) => {
 })
 
 router.get("/getFrames", (req,res) => {
-  
+  Frame.find({ user: req.user._id, projectId: req.query.project }).then((frames) => {
+    //res.send([req.user._id, req.query.project, frames]);
+    var links = frames.map((frame) => {
+      return frame.link
+    });
+    var streams = links.map((link) => {
+      params = {
+        Bucket: 'wholesome-heavies',
+        Key: link,
+      }
+      return s3.getObject(params).createReadStream()
+    })
+    
+    res.send(streams)
+  });
+})
+
+
+router.get('/getProjects', (req,res) => {
+  Project.find({ user: req.user._id}).then((projects) => {
+    res.send(projects)
+  })
 })
 
 router.get("/getNumProjects", (req, res) => {
@@ -125,6 +167,23 @@ router.get("/getNumProjects", (req, res) => {
     console.log(len)
     res.send({len})});
 })
+
+
+router.get("/validateProjectName", (req,res) => {
+  Project.find({ user: req.user._id }).then((projects) => {
+    var temp = projects.filter((project) => {
+      return project.name === req.query.name
+    });
+    if (temp.length > 0) {
+      res.send(false);
+    }
+    else {
+      res.send(true);
+    }
+  });
+})
+
+
 
 
 router.all("*", (req, res) => {
