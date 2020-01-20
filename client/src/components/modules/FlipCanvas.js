@@ -116,9 +116,6 @@ class FlipCanvas extends Component {
             // this.props.newFrame = false;
             this.blankCanvas();
             this.props.setNewFrameFalse();
-            this.setState({
-                currentFrame: this.props.currentFrame,
-            })
             // console.log(this.props.newFrame);
         }
 
@@ -132,6 +129,8 @@ class FlipCanvas extends Component {
             this.loadFrame(this.props.currentFrame);
             this.props.setChangeFrameFalse();
         }
+
+        this.props.setNextFrame();
         // this.props.save(this.canvas);
     }
 

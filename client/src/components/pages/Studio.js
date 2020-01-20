@@ -97,6 +97,7 @@ class Studio extends React.Component {
           mouseDown: false,
           color: "000000",
           canvas: null,
+          nextFrame: 0,
           currentFrame: 0,
           frames: [null],
           newFrame: false,
@@ -133,7 +134,7 @@ class Studio extends React.Component {
       // console.log("current state", this.state);
       this.setState({
         newFrame: true,
-        currentFrame: this.state.currentFrame + 1,
+        nextFrame: this.state.currentFrame + 1,
         save: true,
       })
     }
@@ -148,7 +149,7 @@ class Studio extends React.Component {
 
     previousFrame = () => {
       this.setState({
-        currentFrame: this.state.currentFrame - 1,
+        nextFrame: this.state.currentFrame - 1,
         changeFrame: true,
         save: true,
       })
@@ -156,7 +157,7 @@ class Studio extends React.Component {
 
     nextFrame = () => {
       this.setState({
-        currentFrame: this.state.currentFrame + 1,
+        nextFrame: this.state.currentFrame + 1,
         changeFrame: true,
         save: true,
       })
@@ -166,6 +167,12 @@ class Studio extends React.Component {
       this.setState({
         changeFrame: false,
         save: false,
+      })
+    }
+
+    setNextFrame = () => {
+      this.setState({
+        currentFrame: this.state.currentFrame +1
       })
     }
   
@@ -183,6 +190,7 @@ class Studio extends React.Component {
               changeFrame = {this.state.changeFrame}
               setChangeFrameFalse = {this.setChangeFrameFalse}
               save = {this.state.save}
+              setNextFrame = {this.setNextFrame}
             />
             <div>
               <button onClick={this.previousFrame}>Previous</button>
