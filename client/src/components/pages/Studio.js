@@ -25,80 +25,6 @@ function addProject() {
   });
 }
 
-function sleep(milliseconds) {
-  const date = Date.now();
-  let currentDate = null;
-  do {
-    currentDate = Date.now();
-  } while (currentDate - date < milliseconds);
-}
-
-// function newFrame(state, canvas) {
-//   // state.frames[state.currentFrame] = (canvas.toDataURL("image/png"));
-
-//   state.frames.splice(state.currentFrame+1, 0, null);
-//   const ctx = canvas.getContext("2d");
-//   ctx.fillStyle = "White";
-//   ctx.fillRect(0, 0, canvas.width, canvas.height);
-//   state.currentFrame++;
-// }
-
-function nextFrame(state, canvas, ctx) {
-  state.frames[state.currentFrame] = (canvas.toDataURL("image/png"));
-
-  if (state.currentFrame == state.frames.length-1) {
-    console.log("LAST PAGE CAN'T GO TO NEXT");
-  } else {
-    state.currentFrame++;
-    const ctx = canvas.getContext("2d");
-    const image = new Image();
-    image.src = state.frames[state.currentFrame];
-    
-    image.onload = function () {
-      ctx.drawImage(image, 0, 0);
-    }
-    
-  }
-}
-
-// function previousFrame(state, canvas, ctx) {
-//   // state.frames[state.currentFrame] = (canvas.toDataURL("image/png"));
-//   if (state.currentFrame == 0) {
-//     console.log("FIRST PAGE CAN'T GO TO PREVIOUS");
-//   } else {
-//     state.currentFrame--;
-//     const ctx = canvas.getContext("2d");
-//     const image = new Image();
-//     image.src = state.frames[state.currentFrame];
-    
-//     // console.log(state.currentFrame);
-//     image.onload = function () {
-//       ctx.drawImage(image, 0, 0);
-//     }
-    
-//   }
-// }
-
-function toFrame(state, canvas, index) {
-  // state.frames[state.currentFrame] = (canvas.toDataURL("image/png"));
-  var targetFrame = index;
-  console.log("change to frame", targetFrame);
-  state.currentFrame = targetFrame;
-  const ctx = canvas.getContext("2d");
-  const image = new Image();
-  image.src = state.frames[state.currentFrame];
-  
-  // console.log(state.currentFrame);
-  image.onload = function () {
-    ctx.drawImage(image, 0, 0);
-  }
-}
-
-// function saveCanvasImage(canvas, currentFrame) {
-//   this.frames[state.currentFrame] = canvas.toDataURL("image/png");
-// }
-
-
 class Studio extends React.Component {
     constructor(props) {
       super(props);
@@ -189,19 +115,6 @@ class Studio extends React.Component {
         goNextFrame: false,
       })
     }
-
-    setChangeFrameFalse = () => {
-      this.setState({
-        changeFrame: false,
-        save: false,
-      })
-    }
-
-    setNextFrame = () => {
-      this.setState({
-        currentFrame: this.state.currentFrame +1
-      })
-    }
   
     render() {
       console.log("current frame", this.state.currentFrame);
@@ -238,37 +151,8 @@ class Studio extends React.Component {
             />
             <button onClick={() => addProject()}>add project</button>
         </>
-      )
-      
+      )  
     }
-
-    
   }
-  
-
-// class Animation extends React.Component {
-//     constructor(props) {
-//       super(props);
-//       this.state = { angle: 0 };
-//       this.updateAnimationState = this.updateAnimationState.bind(this);
-//     }
-  
-//     componentDidMount() {
-//       this.rAF = requestAnimationFrame(this.updateAnimationState);
-//     }
-  
-//     updateAnimationState() {
-//       this.setState(prevState => ({ angle: prevState.angle + 1 }));
-//       this.rAF = requestAnimationFrame(this.updateAnimationState);
-//     }
-  
-//     componentWillUnmount() {
-//       cancelAnimationFrame(this.rAF);
-//     }
-  
-//     render() {
-//       return <Studio/>;
-//     }
-// }
 
 export default Studio;
