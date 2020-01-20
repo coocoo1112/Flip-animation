@@ -130,7 +130,7 @@ class FlipCanvas extends Component {
             this.props.setChangeFrameFalse();
         }
 
-        this.props.setNextFrame();
+        // this.props.setNextFrame();
         // this.props.save(this.canvas);
     }
 
