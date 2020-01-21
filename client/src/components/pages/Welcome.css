@@ -1,0 +1,73 @@
+html,
+body{
+    background-color: var(--main-green);
+    position: fixed;
+    margin-top: 0;
+}
+
+.CanvasContainer {
+    position: absolute;
+    text-align: center;
+    margin: 0;
+}
+
+.Canvas {
+    margin: 0;
+    border: 0;
+}
+
+.bigLogo {
+    position: absolute;
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+    left: 3%;
+    right: 0;
+    top: 20%;
+
+}
+
+.welcomeText {
+    position: absolute;
+    top: 20%;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    color: var(--main-yellow);
+    font-size: xx-large;
+}
+
+.buttonContainer {
+    margin: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 15%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: var(--main-yellow);
+    width: 15%;
+    height: 7%;
+    border-radius: 10px;
+}
+
+.linkContainer {
+    margin-top: 8%;
+}
+
+.goButton {
+    color: var(--main-green);
+    background-color: var(--main-yellow);
+    font-size: large;
+    text-decoration: none;
+}
+
+.GoogleButton {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 10%;
+    margin-left: auto;
+    margin-right: auto;
+}

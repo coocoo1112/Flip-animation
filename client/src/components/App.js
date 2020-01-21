@@ -4,6 +4,7 @@ import NotFound from "./pages/NotFound.js";
 import Skeleton from "./pages/Skeleton.js";
 import Studio from "./pages/Studio.js";
 import Profile from "./pages/Profile.js";
+import Welcome from "./pages/Welcome.js";
 
 import "../utilities.css";
 
@@ -51,25 +52,32 @@ class App extends Component {
   render() {
     return (
       <>
-        <NavBar/>
-        <div>
-          <Router>
-            <Skeleton
-              path="/"
-              handleLogin={this.handleLogin}
-              handleLogout={this.handleLogout}
-              userId={this.state.userId}
-            />
-            <Studio
-              path="/studio/"
-            />
-            <Profile path="/profile/"/>
-            <ToolNavBar path="/toolBar/"/>
-            <NavBar path="nav"/>
-            <NotFound default />
-          </Router>
-        </div>
-        
+        {this.state.userId ? (
+          <>
+          <NavBar/>
+          <div>
+            <Router>
+              <Skeleton
+                path="/"
+                handleLogin={this.handleLogin}
+                handleLogout={this.handleLogout}
+                userId={this.state.userId}
+              />
+              <Studio
+                path="/studio/"
+              />
+              <Profile path="/profile/"/>
+              <ToolNavBar path="/toolBar/"/>
+              <NavBar path="nav"/>
+              <NotFound default />
+            </Router>
+          </div>
+          </>
+        ) : (
+          <>
+            
+          </>
+        )}
       </>
     );
   }
