@@ -20,6 +20,7 @@ class FlipCanvas extends Component {
             },
             mouseDown: false,
             canvas: null,
+            playFrame: 0,
         };
         this.canvasRef = React.createRef();
         this.canvas = null;
@@ -101,6 +102,39 @@ class FlipCanvas extends Component {
             this.props.saveFrame(this.canvas, this.props.prevFrame);
             this.loadFrame(this.props.currentFrame);
             this.props.setSwitchFrameFalse();
+        }
+
+        if (this.props.play) {
+            console.log("hi there");
+            console.log("current", this.state.playFrame);
+            console.log("total",this.props.frames.length);
+            if (this.state.playFrame == 0) {
+                this.props.saveFrame(this.canvas, this.props.currentFrame);
+                console.log("play frame");
+                this.loadFrame(this.state.playFrame);
+                this.setState({
+                    playFrame: this.state.playFrame+1,
+                })
+            }
+            if (this.state.playFrame == this.props.frames.length) {
+                console.log("finish animation");
+                this.setState({
+                    playFrame: 0,
+                })
+                this.props.setPlayAnimationFalse();
+            } else {
+                console.log("load frame", this.state.playFrame);
+                
+                
+                setTimeout(() => { 
+                    console.log("play frame");
+                    this.loadFrame(this.state.playFrame);
+                    this.setState({
+                        playFrame: this.state.playFrame+1,
+                    })
+                    
+                }, 1000);
+            }
         }
     }
 

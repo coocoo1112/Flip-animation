@@ -103,6 +103,7 @@ class Studio extends React.Component {
           newFrame: false,
           switchFrame: false,
           prevFrame: 0,
+          play: false,
         };
       this.fs = require("fs");
     }
@@ -145,6 +146,19 @@ class Studio extends React.Component {
         switchFrame: false,
       })
     }
+
+    PlayAnimation = () => {
+      // console.log("Play Animation");
+      this.setState({
+        play: true,
+      })
+    }
+
+    setPlayAnimationFalse = () => {
+      this.setState({
+        play: false,
+      })
+    }
   
     render() {
       return (
@@ -160,11 +174,16 @@ class Studio extends React.Component {
               switchFrame = {this.state.switchFrame}
               setSwitchFrameFalse = {this.setSwitchFrameFalse}
               prevFrame = {this.state.prevFrame}
+              play = {this.state.play}
+              setPlayAnimationFalse = {this.setPlayAnimationFalse}
             />
             <div>
               <button onClick={() => this.goToFrame(this.state.currentFrame-1)}>Previous</button>
               <button onClick={() => this.goToFrame(this.state.currentFrame+1)}>Next</button>
               <button onClick={() => this.createNewFrame()}>New Frame</button>
+            </div>
+            <div>
+              <button onClick={this.PlayAnimation}>Play</button>
             </div>
             <ThumbnailBar 
               className="Thumbnails"
