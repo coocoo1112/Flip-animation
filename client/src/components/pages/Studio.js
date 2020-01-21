@@ -97,89 +97,37 @@ class Studio extends React.Component {
           mouseDown: false,
           color: "000000",
           canvas: null,
-          nextFrame: 0,
           currentFrame: 0,
           frames: [null],
-          frameURLs: [null],
           project: "test1",
           newFrame: false,
-          goPrevFrame: false,
-          goNextFrame: false,
           switchFrame: false,
           prevFrame: 0,
         };
       this.fs = require("fs");
-      // this.canvasRef = React.createRef();
-      // this.canvas = null;
-      // this.ctx = null;
-          
-    }
-
-    updateStateFromCanvas(e) {
-      console.log(e);
-      // this.setState({
-
-      // })
     }
 
     changeColor(e) {
       this.setState({
         color: e.target.id,
       })
-      // console.log("current color", this.state.color);
     }
 
     saveCanvasImage = (canvas, i) => {
-      // console.log(this.state);
-      // console.log(state);
-      // console.log("current frame is", state.currentFrame);
       this.state.frames[i] = canvas.toDataURL("image/png");
-      // console.log("image at frame", i, "is", this.state.frames[i]);
     }
 
     createNewFrame = () => {
-      // console.log("current state", this.state);
       this.setState({
         currentFrame: this.state.currentFrame+1,
         newFrame: true,
       })
-      // console.log(this.state.frames);
       this.state.frames.splice(this.state.currentFrame, 0, null);
     }
 
     setNewFrameFalse = ()  => {
-      // console.log(this.state);
       this.setState({
         newFrame: false,
-      })
-    }
-
-    previousFrame = () => {
-      // console.log("hi");
-      this.setState({
-        currentFrame: this.state.currentFrame-1,
-        goPrevFrame: true,
-      })
-      // console.log(this.state.currentFrame);
-    }
-
-    setPreviousFrameFalse = () => {
-      this.setState({
-        goPrevFrame: false,
-      })
-    }
-
-    nextFrame = () => {
-      this.setState({
-        currentFrame: this.state.currentFrame + 1,
-        goNextFrame: true,
-        save: true,
-      })
-    }
-
-    setNextFrameFalse = () => {
-      this.setState({
-        goNextFrame: false,
       })
     }
 
@@ -199,7 +147,6 @@ class Studio extends React.Component {
     }
   
     render() {
-      // console.log("current frame", this.state.currentFrame);
       return (
         <>
             <FlipCanvas
@@ -210,19 +157,14 @@ class Studio extends React.Component {
               saveFrame={this.saveCanvasImage}
               newFrame = {this.state.newFrame}
               setNewFrameFalse = {this.setNewFrameFalse}
-              goPrevFrame = {this.state.goPrevFrame}
-              setPreviousFrameFalse = {this.setPreviousFrameFalse}
-              goNextFrame = {this.state.goNextFrame}
-              setNextFrameFalse = {this.setNextFrameFalse}
               switchFrame = {this.state.switchFrame}
               setSwitchFrameFalse = {this.setSwitchFrameFalse}
               prevFrame = {this.state.prevFrame}
             />
             <div>
-              <button onClick={this.previousFrame}>Previous</button>
-              <button onClick={this.nextFrame}>Next</button>
+              <button onClick={() => this.goToFrame(this.state.currentFrame-1)}>Previous</button>
+              <button onClick={() => this.goToFrame(this.state.currentFrame+1)}>Next</button>
               <button onClick={() => this.createNewFrame()}>New Frame</button>
-              {/* <button onClick={(e, param) => test(e, param)}>Test</button> */}
             </div>
             <ThumbnailBar 
               className="Thumbnails"

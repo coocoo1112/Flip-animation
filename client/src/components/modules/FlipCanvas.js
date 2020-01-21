@@ -19,10 +19,7 @@ class FlipCanvas extends Component {
              previous_y: null,
             },
             mouseDown: false,
-            // color: "000000",
             canvas: null,
-            // frames: [null],
-            // frameURLs: [null],
         };
         this.canvasRef = React.createRef();
         this.canvas = null;
@@ -51,8 +48,6 @@ class FlipCanvas extends Component {
           this.state.mouseDown = false;
         })
         this.canvas.addEventListener('pointermove', (event) => {
-            // console.log(event.buttons)
-            // console.log(this.props.color);
             const mouse = getMousePos(this.canvas, event);
             ctx.strokeStyle = this.props.color;
             if (this.state.mouseDown){
@@ -79,19 +74,13 @@ class FlipCanvas extends Component {
     loadFrame = (frameNumber) => {
         const image = new Image();
         const ctx = this.canvas.getContext("2d");
-        console.log("draw frame", frameNumber);
-        // console.log(this.props.frames[frameNumber]);
+
         if (this.props.frames[frameNumber]) {
             image.src = this.props.frames[frameNumber];
-            // console.log(image.src);
             image.onload = function () {
                 ctx.drawImage(image, 0, 0);
-                // ctx.fillStyle = "red";
-                // ctx.fillRect(0, 0, 300, 300);
             }
         }
-        // this.ctx.fillStyle = "red";
-        // this.ctx.fillRect(0,0, this.canvas.width, this.canvas.height);
     }
 
     blankCanvas() {
@@ -103,29 +92,12 @@ class FlipCanvas extends Component {
         this.ctx.strokeStyle = this.props.color;
         
         if (this.props.newFrame) {
-            console.log("NEW FRAME");
-            // console.log("save image at", this.props.currentFrame-1);
             this.props.saveFrame(this.canvas, this.props.currentFrame-1);
             this.blankCanvas();
             this.props.setNewFrameFalse();
         }
 
-        if (this.props.goPrevFrame) {
-            console.log("PREVIOUS FRAME");
-            this.props.saveFrame(this.canvas, this.props.currentFrame+1);
-            this.loadFrame(this.props.currentFrame);
-            this.props.setPreviousFrameFalse();
-        }
-
-        if (this.props.goNextFrame) {
-            console.log("NEXT FRAME");
-            this.props.saveFrame(this.canvas, this.props.currentFrame-1);
-            this.loadFrame(this.props.currentFrame);
-            this.props.setNextFrameFalse();
-        }
-
         if (this.props.switchFrame) {
-            console.log("SWITCH TO", this.props.currentFrame);
             this.props.saveFrame(this.canvas, this.props.prevFrame);
             this.loadFrame(this.props.currentFrame);
             this.props.setSwitchFrameFalse();
@@ -133,7 +105,6 @@ class FlipCanvas extends Component {
     }
 
     render() {
-        // console.log("frames", this.props.frames);
         return (
             <div class="CanvasContainer">
                 
