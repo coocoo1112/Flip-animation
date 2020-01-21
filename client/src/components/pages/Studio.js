@@ -105,6 +105,8 @@ class Studio extends React.Component {
           newFrame: false,
           goPrevFrame: false,
           goNextFrame: false,
+          switchFrame: false,
+          prevFrame: 0,
         };
       this.fs = require("fs");
       // this.canvasRef = React.createRef();
@@ -132,7 +134,7 @@ class Studio extends React.Component {
       // console.log(state);
       // console.log("current frame is", state.currentFrame);
       this.state.frames[i] = canvas.toDataURL("image/png");
-      console.log("image at frame", i, "is", this.state.frames[i]);
+      // console.log("image at frame", i, "is", this.state.frames[i]);
     }
 
     createNewFrame = () => {
@@ -141,7 +143,7 @@ class Studio extends React.Component {
         currentFrame: this.state.currentFrame+1,
         newFrame: true,
       })
-      console.log(this.state.frames);
+      // console.log(this.state.frames);
       this.state.frames.splice(this.state.currentFrame, 0, null);
     }
 
@@ -153,12 +155,12 @@ class Studio extends React.Component {
     }
 
     previousFrame = () => {
-      console.log("hi");
+      // console.log("hi");
       this.setState({
         currentFrame: this.state.currentFrame-1,
         goPrevFrame: true,
       })
-      console.log(this.state.currentFrame);
+      // console.log(this.state.currentFrame);
     }
 
     setPreviousFrameFalse = () => {
@@ -180,9 +182,24 @@ class Studio extends React.Component {
         goNextFrame: false,
       })
     }
+
+    goToFrame = (frameNumber) => {
+      console.log(frameNumber);
+      this.setState({
+        prevFrame: this.state.currentFrame,
+        currentFrame: frameNumber,
+        switchFrame: true,
+      })
+    }
+
+    setSwitchFrameFalse = () => {
+      this.setState({
+        switchFrame: false,
+      })
+    }
   
     render() {
-      console.log("current frame", this.state.currentFrame);
+      // console.log("current frame", this.state.currentFrame);
       return (
         <>
             <FlipCanvas
@@ -197,6 +214,9 @@ class Studio extends React.Component {
               setPreviousFrameFalse = {this.setPreviousFrameFalse}
               goNextFrame = {this.state.goNextFrame}
               setNextFrameFalse = {this.setNextFrameFalse}
+              switchFrame = {this.state.switchFrame}
+              setSwitchFrameFalse = {this.setSwitchFrameFalse}
+              prevFrame = {this.state.prevFrame}
             />
             <div>
               <button onClick={this.previousFrame}>Previous</button>
@@ -208,7 +228,7 @@ class Studio extends React.Component {
               className="Thumbnails"
               numFrames={this.state.frames.length}
               currentFrame = {this.state.currentFrame}
-              FrameChanger = {(index) => toFrame(this.state, this.canvas, index)}
+              goToFrame = {this.goToFrame}
               frames = {this.state.frames}
             />
             <ToolNavBar

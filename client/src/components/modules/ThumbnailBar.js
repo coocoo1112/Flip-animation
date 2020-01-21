@@ -8,13 +8,17 @@ class ThumbnailBar extends Component {
     super(props);
   }
 
+  test() {
+    console.log("thumbnail was pressed");
+  }
+
   render() {
     let thumbnails = this.props.frames.map((frameObj, i) => (
       <Thumbnail
         key = {i}
         frame = {frameObj}
         currentFrame = {(i == this.props.currentFrame)}
-        FrameChanger = {() => this.props.FrameChanger(i)}
+        goToFrame = {() => this.props.goToFrame(i)}
         id = {i}
       />
     ))

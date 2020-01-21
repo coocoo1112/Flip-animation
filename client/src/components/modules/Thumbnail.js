@@ -11,6 +11,10 @@ class Thumbnail extends Component {
         super(props);
     }
 
+    test() {
+        console.log("thumbnail pressed");
+    }
+
     render() {
         return(
             this.props.currentFrame ? (
@@ -21,7 +25,7 @@ class Thumbnail extends Component {
                 </>
             ) : (
                 <>
-                    <button onClick={this.props.FrameChanger} className="button">
+                    <button onClick={this.props.goToFrame} className="button">
                         <img className="ThumbnailImage" src={this.props.frame}/>
                     </button>
                 </>
