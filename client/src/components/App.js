@@ -49,21 +49,16 @@ class App extends Component {
   };
 
   render() {
+    console.log("user",this.state.userId);
     return (
       <>
-        {this.props.userId ? (
+        {this.state.userId ? (
           <>
             <NavBar/>
             <div>
               <Router>
                 <Skeleton
                   path="/"
-                  handleLogin={this.handleLogin}
-                  handleLogout={this.handleLogout}
-                  userId={this.state.userId}
-                />
-                <Welcome 
-                  path="/welcome/"
                   handleLogin={this.handleLogin}
                   handleLogout={this.handleLogout}
                   userId={this.state.userId}
