@@ -1,0 +1,19 @@
+.HorizontalScroller {
+    position: absolute;
+    background-color: var(--grey);
+    bottom: 5%;
+    margin-left: 10%;
+    width: 60%;
+    height: 10%;
+    border-radius: 20px;
+}
+
+.Thumbnail {
+    background-color: white;
+    height: 100%;
+    width: 10%;
+    margin-left: 2%;
+    border-color: var(--main-green);
+    border-width: 5px;
+    border-style: none;
+}

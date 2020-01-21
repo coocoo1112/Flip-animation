@@ -1,0 +1,24 @@
+.ThumbnailImage {
+    /* border-style: solid; */
+    /* width: 20%; */
+    margin: 0;
+    width: 100px;
+}
+
+.button {
+    padding:0;
+    background-color: white;
+    margin-left: 10px;
+    border-style: none;
+    height: 80px;
+    top: 0;
+}
+
+button:focus {
+    outline:0;
+}
+
+.selected {
+    border-style: solid;
+    border-color: var(--main-yellow);
+}

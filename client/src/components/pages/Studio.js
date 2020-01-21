@@ -2,26 +2,94 @@ import React, { Component } from "react";
 
 import "../../utilities.css";
 import "./Studio.css";
-import ToolNavBar from "../modules/ToolNavBar.js"
+import FlipCanvas from "../modules/FlipCanvas.js";
+import ToolNavBar from "../modules/ToolNavBar.js";
+import ThumbnailBar from "../modules/ThumbnailBar.js";
+import { get, post } from "../../utilities.js";
 
 
-function getMousePos(canvas, evt) {
-    var rect = canvas.getBoundingClientRect();
-    return {
-      x: evt.clientX - rect.left,
-      y: evt.clientY - rect.top
-    };
+
+// function addFrame() {
+//   var AWS = require('aws-sdk');
+//   // Set the region 
+//   AWS.config.update({region: 'us-east-2'});
+
+//   // Create S3 service object
+//   s3 = new AWS.S3({apiVersion: '2006-03-01'});
+
+//   // call S3 to retrieve upload file to specified bucket
+//   var uploadParams = {Bucket: 'wholesome-heavies', Key: '', Body: ''};
+//   var file = "./flip_logo_small.png";
+
+//   // Configure the file stream and obtain the upload parameters
+//   var fs = require('fs');
+//   var fileStream = fs.createReadStream(file);
+//   fileStream.on('error', function(err) {
+//     console.log('File Error', err);
+//   });
+//   uploadParams.Body = fileStream;
+//   var path = require('path');
+//   uploadParams.Key = path.basename(file);
+
+//   // call S3 to retrieve upload file to specified bucket
+//   s3.upload (uploadParams, function (err, data) {
+//     if (err) {
+//       console.log("Error", err);
+//     } if (data) {
+//       console.log("Upload Success", data.Location);
+//     }
+//   });
+// }
+// when adding frames each frame will be linked to a project and user
+//in mongoose from which we can get the filename of the file in S3
+function addProject() {
+  var nameEntered = prompt("enter the name of your project");
+  get('/api/validateProjectName', { name: nameEntered}).then((out) => {
+    if (out) {
+      get("/api/whoami").then((user) => {
+        const who = user.googleid;
+        //console.log(who);
+        const body = {user: who};
+        get("/api/getNumProjects", body).then((result) => {
+          //console.log(result.len);
+          const len = result.len;
+          const projectBody = {
+            name: nameEntered,
+            user: who
+          };
+          post("/api/newProject", projectBody)
+        });
+      });
+    }
+    else {
+      console.log("name taken");
+    }
+  })
+    
 }
 
-function changeColor(ctx, e) {
-  ctx.strokeStyle = e.target.id
-  console.log(e.target.id);
+function getFrames(state) {
+  get("/api/getFrames", { project: state.project}).then((frames) => console.log(frames));
+}
+
+function getProjects() {
+  get("/api/getProjects").then((projects) => console.log(projects))
+}
+
+function testNameCheck(inp) {
+  //console.log("test");
+  const body = { name: inp };
+  //console.log(body);
+  get("/api/validateProjectName", body).then((output) => {
+    console.log(output);
+    return output
+  });
 }
 
 class Studio extends React.Component {
     constructor(props) {
-        super(props);
-        this.state = {
+      super(props);
+      this.state = {
           mouse_coord: {
            previous_x: null,
            previous_y: null,
@@ -29,114 +97,109 @@ class Studio extends React.Component {
           mouseDown: false,
           color: "000000",
           canvas: null,
+          currentFrame: 0,
+          frames: [null],
+          project: "test1",
+          newFrame: false,
+          switchFrame: false,
+          prevFrame: 0,
+          play: false,
         };
-        this.canvasRef = React.createRef();
-        this.canvas = null;
-        this.ctx = null;
+      this.fs = require("fs");
     }
-  
-    componentDidMount() {
-        this.canvas = this.canvasRef.current;
-        const ctx = this.canvas.getContext('2d');
-        this.ctx = ctx;
-        ctx.fillStyle = "White";
-        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        ctx.beginPath();
-        // canvas.addEventListener("pointerdown", (event) => {
-        //   this.state.mouseDown = true;
-        //   ctx.beginPath();
-        //   this.state.mouse_coord.previous_x = null;
-        //   this.state.mouse_coord.previous_y = null;
-        // })
-        // canvas.addEventListener('pointerup', (event) => {
-        //   this.state.mouseDown = false;
-        // })
-        // ctx.strokeStyle = "Red";
-        this.canvas.addEventListener('pointerleave', (event) => {
-          this.state.mouse_coord.previous_x = null;
-          this.state.mouse_coord.previous_y = null;
-        })
-        this.canvas.addEventListener('pointerdown', (event) => {
-          this.state.mouseDown = true;
-          ctx.beginPath();
-          this.state.mouse_coord.previous_x = null;
-          this.state.mouse_coord.previous_y = null;
-        })
-        this.canvas.addEventListener('pointerup', (event) => {
-          this.state.mouseDown = false;
-        })
-        this.canvas.addEventListener('pointermove', (event) => {
-            console.log(event.buttons)
-            const mouse = getMousePos(this.canvas, event);
-            
-            if (this.state.mouseDown){
 
-              if ((this.state.mouse_coord.previous_x != null) && 
-              ((this.state.mouse_coord.previous_x != mouse.x) || (this.state.mouse_coord.previous_y != mouse.y))) {
-                ctx.moveTo(this.state.mouse_coord.previous_x, this.state.mouse_coord.previous_y);
-                ctx.lineTo(mouse.x, mouse.y);
-                ctx.stroke(); 
-              }
-              if ((this.state.mouse_coord.previous_x != mouse.x) || (this.state.mouse_coord.previous_y != mouse.y)){
-                this.setState({
-                  mouse_coord: {
-                    previous_x: mouse.x,
-                    previous_y: mouse.y,
-                  },
-                  mouseDown: this.state.mouseDown,
-                });
-              }
-            }
-        });
+    changeColor(e) {
+      this.setState({
+        color: e.target.id,
+      })
+    }
+
+    saveCanvasImage = (canvas, i) => {
+      this.state.frames[i] = canvas.toDataURL("image/png");
+    }
+
+    createNewFrame = () => {
+      this.setState({
+        currentFrame: this.state.currentFrame+1,
+        newFrame: true,
+      })
+      this.state.frames.splice(this.state.currentFrame, 0, null);
+    }
+
+    setNewFrameFalse = ()  => {
+      this.setState({
+        newFrame: false,
+      })
+    }
+
+    goToFrame = (frameNumber) => {
+      console.log(frameNumber);
+      this.setState({
+        prevFrame: this.state.currentFrame,
+        currentFrame: frameNumber,
+        switchFrame: true,
+      })
+    }
+
+    setSwitchFrameFalse = () => {
+      this.setState({
+        switchFrame: false,
+      })
+    }
+
+    PlayAnimation = () => {
+      // console.log("Play Animation");
+      this.setState({
+        play: true,
+      })
+    }
+
+    setPlayAnimationFalse = () => {
+      this.setState({
+        play: false,
+      })
     }
   
     render() {
       return (
         <>
-            <div class="CanvasContainer">
-                
-              <div className="Shadow3"></div>
-              <div className="Shadow2"></div>
-              <div className="Shadow1"></div>
-              <canvas width="700" height="500" ref={this.canvasRef} class="Canvas" />
-              
-            </div>
-            <ToolNavBar
-              Colorchanger = {(e) => changeColor(this.ctx, e)}
+            <FlipCanvas
+              className="flipCanvas"
+              currentFrame={this.state.currentFrame}
+              frames={this.state.frames}
+              color={this.state.color}
+              saveFrame={this.saveCanvasImage}
+              newFrame = {this.state.newFrame}
+              setNewFrameFalse = {this.setNewFrameFalse}
+              switchFrame = {this.state.switchFrame}
+              setSwitchFrameFalse = {this.setSwitchFrameFalse}
+              prevFrame = {this.state.prevFrame}
+              play = {this.state.play}
+              setPlayAnimationFalse = {this.setPlayAnimationFalse}
             />
+            <div>
+              <button onClick={() => this.goToFrame(this.state.currentFrame-1)}>Previous</button>
+              <button onClick={() => this.goToFrame(this.state.currentFrame+1)}>Next</button>
+              <button onClick={() => this.createNewFrame()}>New Frame</button>
+            </div>
+            <div>
+              <button onClick={this.PlayAnimation}>Play</button>
+            </div>
+            <ThumbnailBar 
+              className="Thumbnails"
+              numFrames={this.state.frames.length}
+              currentFrame = {this.state.currentFrame}
+              goToFrame = {this.goToFrame}
+              frames = {this.state.frames}
+            />
+            <ToolNavBar
+              Colorchanger = {(e) => this.changeColor(e)}
+            />
+            <button onClick={() => getFrames(this.state)}>test</button>
+            <button onClick={() => addProject()}>add project</button>
         </>
-      )
-      
+      )  
     }
-
-    
   }
-  
 
-class Animation extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = { angle: 0 };
-      this.updateAnimationState = this.updateAnimationState.bind(this);
-    }
-  
-    componentDidMount() {
-      this.rAF = requestAnimationFrame(this.updateAnimationState);
-    }
-  
-    updateAnimationState() {
-      this.setState(prevState => ({ angle: prevState.angle + 1 }));
-      this.rAF = requestAnimationFrame(this.updateAnimationState);
-    }
-  
-    componentWillUnmount() {
-      cancelAnimationFrame(this.rAF);
-    }
-  
-    render() {
-      return <Studio angle={this.state.angle} />;
-    }
-}
-
-export default Animation;
-// ReactDOM.render(<Animation />, document.body);
+export default Studio;
