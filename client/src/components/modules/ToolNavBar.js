@@ -4,14 +4,6 @@ import { Link } from "@reach/router";
 import { get, post } from "../../utilities";
 import "./ToolNavBar.css";
 
-/**
- * The navigation bar at the top of all pages. Takes no props.
- */
-
-function handleButtonPress(e) {
-    // console.log(clic_id);
-  console.log(e.target.id);
-}
 
 class ToolNavBar extends Component {
   constructor(props) {
@@ -28,6 +20,10 @@ class ToolNavBar extends Component {
       <div className="CurrentTool">
       </div>
       <div className="CurrentToolContainer">
+        <button
+          id="eraser"
+          onClick = {this.props.Colorchanger}
+        >Eraser</button>
         <button 
           className="ChangeColor"
           id="red"

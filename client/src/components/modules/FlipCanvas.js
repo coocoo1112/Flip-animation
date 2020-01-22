@@ -47,6 +47,7 @@ class FlipCanvas extends Component {
         this.canvas2.addEventListener('pointerleave', (event) => {
           this.state.mouse_coord.previous_x = null;
           this.state.mouse_coord.previous_y = null;
+          this.state.mouseDown = false;
         })
         this.canvas2.addEventListener('pointerdown', (event) => {
           this.state.mouseDown = true;
@@ -114,7 +115,8 @@ class FlipCanvas extends Component {
 
     componentDidUpdate() {
         this.ctx.strokeStyle = this.props.color;
-        
+        this.ctx.lineWidth = this.props.thickness;
+
         if (this.props.newFrame) {
             this.props.saveFrame(this.canvas, this.props.currentFrame-1);
             this.blankCanvas();
