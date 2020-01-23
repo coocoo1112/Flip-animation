@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Open+Sans+Condensed:300&display=swap');
+
+.ProfilePageContainer{
+    overflow: auto;
+    height: 100vh;
+}
+
+.Profile-Container{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    justify-content: center;
+    align-items: center;
+}
+
+.Profile-line {
+    margin-left: 10%;
+    margin-right: 10%;
+    border-color: var(--grey);
+}
+
+.Profile-subContainer {
+    flex-grow: 1;
+    flex-basis: 0;
+}
+  
+.Profile-subContainer + .Profile-subContainer {
+    margin-left: var(--m);
+}
+
+.ProfileIcon {
+    width: 7%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.Profile-name-and-stats{
+    /*text-align: center;*/
+    align-items: center;
+}
+
+.Profile-stats{
+    justify-content: center;
+}
+
+.ProfileIcon + .Profile-name-and-stats{
+    margin-left: var(--xl);
+}
+
+.Profile-subTitle {
+    font-weight: 300;
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-size: 24px;
+    margin: var(--m) var(--s);
+}
+
+.Profile-name {
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-size: 40px;
+    font-weight: 300;
+}
+
+.stat{
+    font-size: 20px;
+}
+
+.stat + .stat {
+    margin-left: var(--l);
+}
+
+.Projects-Container{
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: var(--m);
+    margin-bottom: var(--m);
+    flex-wrap: wrap;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: var(--other-yellow); 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: var(--main-yellow); 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background:var(--main-yellow); 
+  }

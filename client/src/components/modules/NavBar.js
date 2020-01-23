@@ -19,10 +19,10 @@ class NavBar extends Component {
 
   render() {
     return (
-      <nav className="NavBar-container">
+      <nav className="NavBar-container u-flex">
         <img src={require("../../../../assets/flip_logo_small.png")} class="logo"/>
         {/* <div className="NavBar-title u-inlineBlock">flip</div> */}
-        <div className="NavBar-linkContainer u-inlineBlock">
+        <div className="NavBar-linkContainer u-flex">
           <Link to="/" className="NavBar-link">
             Home
           </Link>
@@ -30,12 +30,8 @@ class NavBar extends Component {
               Studio
           </Link>
           <Link to="/profile/" className="NavBar-link profile-link">
-          
             <img className="profileIcon" src={require("../../../../assets/profile_icon.png")}/>
           </Link>
-          {/* <a>
-            <img className="profileIcon" src={require("../../../../assets/profile_icon.png")}/>
-          </a> */}
         </div>
       </nav>
     );
