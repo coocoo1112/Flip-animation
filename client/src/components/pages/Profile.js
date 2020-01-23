@@ -34,7 +34,7 @@ class Profile extends Component {
       this.setState({project_names : getProjectNames(this.state.projects)});
       console.log(this.state.project_names);
       this.setState({didmount : true});
-    });//console.log(projects[0]));//this.setState({projects : projects}))    
+    });
     
   }
 
