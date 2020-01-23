@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import { get } from "../../utilities";
 import CurrentProject from "../modules/CurrentProject.js"
+import GoogleLogin, { GoogleLogout } from "react-google-login";
 
 import "../../utilities.css";
 import "./Profile.css";
+
+const GOOGLE_CLIENT_ID = "121479668229-t5j82jrbi9oejh7c8avada226s75bopn.apps.googleusercontent.com";
 
 function getProjectNames(projects){
   var project_names = [];
@@ -67,6 +70,14 @@ class Profile extends Component {
         <hr className="Profile-line" />
         <div className="u-flex Projects-Container">
           {current_projects}
+        </div>
+        <div className = "LogoutContainer">
+          <GoogleLogout
+            clientId={GOOGLE_CLIENT_ID}
+            buttonText="Logout"
+            onLogoutSuccess={this.props.handleLogout}
+            onFailure={(err) => console.log(err)}
+          />
         </div>
       </div>
     );

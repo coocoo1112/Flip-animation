@@ -66,7 +66,10 @@ class App extends Component {
               <Studio
                 path="/studio/"
               />
-              <Profile path="/profile/"/>
+              <Profile
+                path="/profile/"
+                handleLogout={this.handleLogout}
+              />
               <ToolNavBar path="/toolBar/"/>
               <NavBar path="nav"/>
               <NotFound default />
