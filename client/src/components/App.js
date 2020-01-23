@@ -52,7 +52,7 @@ class App extends Component {
   render() {
     return (
       <>
-        {this.state.userId ? (
+        {this.state.userId ?  (
           <>
           <NavBar/>
           <div>
@@ -75,7 +75,12 @@ class App extends Component {
           </>
         ) : (
           <>
-            
+            <Welcome
+              path="/"
+              handleLogin={this.handleLogin}
+              handleLogout={this.handleLogout}
+              userId={this.state.userId}
+            />
           </>
         )}
       </>

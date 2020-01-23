@@ -49,39 +49,35 @@ class Welcome extends Component {
     render() {
       return (
         <>
-          
-          <div class="CanvasContainer">
-            {this.props.userId ? (
-              <GoogleLogout
-                className="GoogleBUtton"
-                clientId={GOOGLE_CLIENT_ID}
-                buttonText="Logout"
-                onLogoutSuccess={this.props.handleLogout}
-                onFailure={(err) => console.log(err)}
-              />
-            ) : (
-              <GoogleLogin
-                className="GoogleButton"
-                clientId={GOOGLE_CLIENT_ID}
-                buttonText="Login"
-                onSuccess={this.props.handleLogin}
-                onFailure={(err) => console.log(err)}
-              />
-            )}
-            <div class="welcomeText">Welcome To</div>
-            <img src = {require("../../../../assets/flip_logo-2.png")} class="bigLogo"/>
-            {/* <div class="buttonContainer">
-              <div class="linkContainer">
-                <a 
-                  class="goButton"
-                  href = "/studio/">
-                    Let's Get Started
-                </a>
-              </div>
-            </div> */}
-            
+          <div className="canvasContainer"> 
             <canvas width={innerWidth} height={innerHeight} ref={this.canvasRef} class="Canvas" />
-            
+          </div>
+          <div className="fullContainer">
+            <div className="itemContainer">
+              <div className="subContainer">
+                <div class="welcomeText">Welcome To</div>
+              </div>
+              <div className="subContainer">
+                <img src = {require("../../../../assets/flip_logo-2.png")} class="bigLogo"/>
+              </div>
+              <div className="subContainer">
+                {this.props.userId ? (
+                  <GoogleLogout
+                    clientId={GOOGLE_CLIENT_ID}
+                    buttonText="Logout"
+                    onLogoutSuccess={this.props.handleLogout}
+                    onFailure={(err) => console.log(err)}
+                  />
+                ) : (
+                  <GoogleLogin
+                    clientId={GOOGLE_CLIENT_ID}
+                    buttonText="Login"
+                    onSuccess={this.props.handleLogin}
+                    onFailure={(err) => console.log(err)}
+                  />
+                )}
+              </div>
+            </div>
           </div>
         </>
       )
