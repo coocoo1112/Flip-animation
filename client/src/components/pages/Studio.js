@@ -76,15 +76,38 @@ function getProjects() {
   get("/api/getProjects").then((projects) => console.log(projects))
 }
 
-function testNameCheck(inp) {
-  //console.log("test");
-  const body = { name: inp };
-  //console.log(body);
-  get("/api/validateProjectName", body).then((output) => {
-    console.log(output);
-    return output
+// function testNameCheck(inp) {
+//   //console.log("test");
+//   const body = { name: inp };
+//   //console.log(body);
+//   get("/api/validateProjectName", body).then((output) => {
+//     console.log(output);
+//     return output
+//   });
+// }
+
+function showFrame(state, canvas) {
+  var i = prompt("enter frame number");
+  const body = {
+    project: state.project,
+    idSend: state.frameIds[i]
+  };
+  console.log(body.id)
+  get("/api/getFrame", body).then((frame) => {
+    console.log("hi");
+    var d = frame;
+    var w = window.open('about:blank','image from canvas');
+    w.document.write("<img src='"+d+"' alt='from canvas'/>");
   });
 }
+
+function changeProject(name) {
+  get("/api/getFrames").then((output) => {
+    this.state.frames = output;
+  })
+}
+
+
 
 class Studio extends React.Component {
     constructor(props) {
@@ -99,11 +122,13 @@ class Studio extends React.Component {
           canvas: null,
           currentFrame: 0,
           frames: [null],
+          frameIds: [null],
           project: "test1",
           newFrame: false,
           switchFrame: false,
           prevFrame: 0,
           play: false,
+          projects: [null],
         };
       this.fs = require("fs");
     }
@@ -115,7 +140,42 @@ class Studio extends React.Component {
     }
 
     saveCanvasImage = (canvas, i) => {
-      this.state.frames[i] = canvas.toDataURL("image/png");
+      var canvasStream = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+      //window.location.href=canvasStream;
+      console.log("test", this.state.currentFrame, this.state.frameIds)
+      const body = {
+        project: this.state.project,
+        stream: canvasStream,
+        id: this.state.frameIds[this.state.currentFrame - 1],
+      };
+      //console.log("2");
+      post("/api/sendFrame", body).then((id) => {
+        console.log("hi", id)
+        this.state.frameIds[this.state.currentFrame - 1] = id;
+        console.log("after change: ", this.state.frameIds)
+        console.log("id: ", id);
+        
+        //this.state.frames[i] = this.setFrame(id, i, canvasStream)
+        // this.state.frames[i] = canvasStream;
+        // console.log(this.state.frames)
+      });
+      //console.log("test2", canvasStream);
+      this.state.frames[i] = canvasStream;
+      console.log(this.state.frames)
+    }
+
+    setFrame = (id, i, stream) => {
+      const body = {
+        project: this.state.project,
+        idSend: id,
+      };
+      get("/api/getFrame", body).then((frame) => {
+        console.log("idk test: ", frame.data === stream);
+        //console.log(frame.data);
+        //console.log(stream);
+        //console.log("test1 ", frame.data)
+        return frame.data;
+      });
     }
 
     createNewFrame = () => {
@@ -124,6 +184,8 @@ class Studio extends React.Component {
         newFrame: true,
       })
       this.state.frames.splice(this.state.currentFrame, 0, null);
+      this.state.frameIds.splice(this.state.currentFrame, 0, null);
+
     }
 
     setNewFrameFalse = ()  => {
@@ -165,6 +227,7 @@ class Studio extends React.Component {
         <>
             <FlipCanvas
               className="flipCanvas"
+              frameIds={this.state.frameIds}
               currentFrame={this.state.currentFrame}
               frames={this.state.frames}
               color={this.state.color}
@@ -195,8 +258,21 @@ class Studio extends React.Component {
             <ToolNavBar
               Colorchanger = {(e) => this.changeColor(e)}
             />
-            <button onClick={() => getFrames(this.state)}>test</button>
-            <button onClick={() => addProject()}>add project</button>
+            <div>
+              <button onClick={() => getFrames(this.state)}>test</button>
+              <button onClick={() => showFrame(this.state, this.state.canvas)}>show frame</button>
+              <button onClick={() => addProject()}>add project</button>
+            </div>
+            <div className="dropdown">
+              <button class="dropbtn">Dropdown
+      `         <i class="fa fa-caret-down"></i>
+              </button>
+              <div class="dropdown-content">
+                <a href="#">Link 1</a>
+                <a href="#">Link 2</a>
+                <a href="#">Link 3</a>
+              </div>
+            </div>
         </>
       )  
     }
