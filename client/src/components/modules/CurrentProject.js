@@ -8,6 +8,10 @@ class CurrentProject extends Component{
         super(props);
     }
 
+    redirect_studio(){
+        location.href = "../studio/";
+    }
+
     render() {
         return(
             <>
@@ -15,9 +19,9 @@ class CurrentProject extends Component{
                     <div className = "FakeCanvasContainer">
                         <div className="FakeShadow2"></div>
                         <div className="FakeShadow1"></div>
-                        <button onclick="location.href = '../studio/'" className="Frame1">
-                            
-                        </button>
+                        <Link to = "../studio/">
+                            <div className = "Frame1"/>
+                        </Link>
                     </div>
                     <div className = "Link Container">  
                         <Link to = "../studio/" className = "ProjectDisplay">

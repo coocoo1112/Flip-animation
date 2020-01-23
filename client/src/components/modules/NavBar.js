@@ -23,9 +23,6 @@ class NavBar extends Component {
         <img src={require("../../../../assets/flip_logo_small.png")} class="logo"/>
         {/* <div className="NavBar-title u-inlineBlock">flip</div> */}
         <div className="NavBar-linkContainer u-flex">
-          <Link to="/" className="NavBar-link">
-            Home
-          </Link>
           <Link to="/studio/" className="NavBar-link">
               Studio
           </Link>

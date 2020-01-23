@@ -57,11 +57,8 @@ class App extends Component {
           <NavBar/>
           <div>
             <Router>
-              <Skeleton
+              <Studio
                 path="/"
-                handleLogin={this.handleLogin}
-                handleLogout={this.handleLogout}
-                userId={this.state.userId}
               />
               <Studio
                 path="/studio/"
