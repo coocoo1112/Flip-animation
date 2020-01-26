@@ -89,8 +89,10 @@ router.post("/sendFrame", auth.ensureLoggedIn, (req, res) => {
   uploadParams.Body = req.body.stream;//fileStream;
   if (req.body.id) {
     Frame.find({ _id: req.body.id }).then((frame) => {
-      const link = req.user._id + "/" + req.body.project + "/" + frame._id ;//".png";
-      uploadParams.Key = link
+      frame = frame[0];
+      console.log("LINK+++++++++++", frame)
+      const link = frame.link;//req.user._id + "/" + req.body.project + "/" + frame._id ;//".png";
+      uploadParams.Key = link;
       s3.upload (uploadParams, function (err, data) {
         console.log("test");
         if (err) {
@@ -100,7 +102,10 @@ router.post("/sendFrame", auth.ensureLoggedIn, (req, res) => {
           console.log("Upload Success", data.Location);
         }
       });
-      res.send(frame._id);
+      out = {
+        id: frame._id,
+      };
+      res.send(out);
     });
   }
   else {
@@ -125,7 +130,10 @@ router.post("/sendFrame", auth.ensureLoggedIn, (req, res) => {
           console.log("Upload Success", data.Location);
         }
       });
-      res.send(frame._id)
+      out = {
+        id: frame._id,
+      };
+      res.send(out);
     });
   }
 })
@@ -154,8 +162,11 @@ router.post("/fileToS3", auth.ensureLoggedIn, (req, res) => {
 })
 
 router.post("/updateFrameList", auth.ensureLoggedIn, (req,res) => {
-  Frame.find({ user: req.user._id, project: req.body.project }).then((frameObj) => {
-    frameObj.frameOrder = req.body.order;
+  Project.find({ user: req.user._id, name: req.body.project }).then((frameObj) => {
+    console.log(frameObj);
+    proj = frameObj[0]
+    proj.frameOrder = req.body.order;
+    proj.save().then((output) => res.send(output))
   });
 })
 
@@ -183,15 +194,15 @@ router.get("/getFrame", (req,res) => {
   console.log("abcd", req.query.idSend)
   //console.log(req.query.id)
   const frameId = new ObjectId(req.query.idSend);
-  console.log("abc", frameId);
+  //console.log("abc", frameId);
   Frame.find({ user: req.user._id, projectId: req.query.project, _id: frameId }).then((frame) => {
     //res.send([req.user._id, req.query.project, frames]);
     frame = frame[0];
-    console.log("user: ", req.user._id);
-    console.log("project: ", req.query.project);
-    console.log("frame id: ", frameId);
-    console.log("frame: ", frame);
-    console.log(frame.link)
+    // console.log("user: ", req.user._id);
+    // console.log("project: ", req.query.project);
+    // console.log("frame id: ", frameId);
+    // console.log("frame: ", frame);
+    // console.log(frame.link)
     const link = frame.link
     const params = {
       Bucket: 'wholesome-heavies',
@@ -202,10 +213,12 @@ router.get("/getFrame", (req,res) => {
       if (err)
         return err;
       let objectData = data.Body.toString('utf-8');
-      console.log(objectData);
+      //console.log(objectData);
       const body = {
         data: objectData,
+        sequence: req.query.sequence,
       };
+      console.log(body.sequence)
       res.send(body);
     });
     //res.send({});//.createReadStream());
@@ -227,6 +240,16 @@ router.get("/getNumProjects", (req, res) => {
     var len = projects.length
     console.log(len)
     res.send({len})});
+})
+
+router.get("/getProject", (req,res) => {
+  Project.find({ user: req.user._id, name: req.query.project}).then((project) => {
+    res.send(project)
+  })
+})
+
+router.get("/getFramesInOrder", (req, res) => {
+
 })
 
 

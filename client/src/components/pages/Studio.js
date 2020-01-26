@@ -42,39 +42,7 @@ import { get, post } from "../../utilities.js";
 // }
 // when adding frames each frame will be linked to a project and user
 //in mongoose from which we can get the filename of the file in S3
-function addProject() {
-  var nameEntered = prompt("enter the name of your project");
-  get('/api/validateProjectName', { name: nameEntered}).then((out) => {
-    if (out) {
-      get("/api/whoami").then((user) => {
-        const who = user.googleid;
-        //console.log(who);
-        const body = {user: who};
-        get("/api/getNumProjects", body).then((result) => {
-          //console.log(result.len);
-          const len = result.len;
-          const projectBody = {
-            name: nameEntered,
-            user: who
-          };
-          post("/api/newProject", projectBody)
-        });
-      });
-    }
-    else {
-      console.log("name taken");
-    }
-  })
-    
-}
 
-function getFrames(state) {
-  get("/api/getFrames", { project: state.project}).then((frames) => console.log(frames));
-}
-
-function getProjects() {
-  get("/api/getProjects").then((projects) => console.log(projects))
-}
 
 // function testNameCheck(inp) {
 //   //console.log("test");
@@ -109,6 +77,9 @@ function changeProject(name) {
 
 
 
+
+
+
 class Studio extends React.Component {
     constructor(props) {
       super(props);
@@ -123,7 +94,7 @@ class Studio extends React.Component {
           currentFrame: 0,
           frames: [null],
           frameIds: [null],
-          project: "test1",
+          project: null,
           newFrame: false,
           switchFrame: false,
           prevFrame: 0,
@@ -138,54 +109,160 @@ class Studio extends React.Component {
         color: e.target.id,
       })
     }
+    
+    addProject() {
+      var nameEntered = prompt("enter the name of your project");
+      get('/api/validateProjectName', { name: nameEntered}).then((out) => {
+        if (out) {
+          get("/api/whoami").then((user) => {
+            const who = user.googleid;
+            //console.log(who);
+            const body = {user: who};
+            get("/api/getNumProjects", body).then((result) => {
+              //console.log(result.len);
+              const len = result.len;
+              const projectBody = {
+                name: nameEntered,
+                user: who,
+                frameOrder: null,
+              };
+              this.setState({
+                project: nameEntered,
+              })
+              post("/api/newProject", projectBody)
+            });
+          });
+        }
+        else {
+          console.log("name taken");
+        }
+      })
+        
+    }
+
+    switchProject(name) {
+      get("/api/getProject", {project: name}).then((projectSend) => {
+        console.log(projectSend)
+        const order = projectSend[0].frameOrder;
+        console.log(order)
+        var temp = [];
+        for (var i = 0, len = order.length; i < len; i++) {
+          temp.push(null)
+        }
+        console.log("temp: ", temp)
+        for (var i = 0, len = order.length; i < len; i++) {
+          const element = order[i];
+          const body = {
+            project: name,
+            idSend: element,
+            sequence: i,
+          };
+          get("/api/getFrame", body).then((frame) => {
+            temp.splice(frame.sequence, 1, frame.data)
+            console.log(order.length, i, frame)
+            //console.log(frame.data)
+            
+            if (i === order.length) {
+              //console.log(temp)
+              this.setState({
+                frameIds: order,
+                frames: temp,
+                project: name,
+              });
+
+            }
+          });
+        };
+        
+        console.log("FRAMES: ", temp)//this.state.frames)
+      })
+    }
+
+    getProjects() {
+      get("/api/getProjects").then((projectsReturned) => {
+        
+        let projectsDiv = projectsReturned.map((project) => {
+          return <button onClick={() => this.switchProject(project.name)}>{project.name}</button>
+        })
+        this.setState({
+          projects: projectsDiv,
+        })
+        console.log("Div: ", projectsDiv);
+        console.log(projectsReturned);
+      })
+    }
 
     saveCanvasImage = (canvas, i) => {
       var canvasStream = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+      console.log(canvasStream);
       //window.location.href=canvasStream;
-      console.log("test", this.state.currentFrame, this.state.frameIds)
+      //console.log("test", this.state.currentFrame, this.state.frameIds)
       const body = {
         project: this.state.project,
         stream: canvasStream,
-        id: this.state.frameIds[this.state.currentFrame - 1],
+        id: this.state.frameIds[i],//this.state.currentFrame - 1],
       };
+      console.log("ID: ", body.id);
       //console.log("2");
-      post("/api/sendFrame", body).then((id) => {
-        console.log("hi", id)
-        this.state.frameIds[this.state.currentFrame - 1] = id;
-        console.log("after change: ", this.state.frameIds)
-        console.log("id: ", id);
-        
-        //this.state.frames[i] = this.setFrame(id, i, canvasStream)
-        // this.state.frames[i] = canvasStream;
-        // console.log(this.state.frames)
+      post("/api/sendFrame", body).then((output) => {
+        const id = output.id;
+        const temp = this.state.frameIds;
+        const tempFrames = this.state.frames;
+        console.log("index at: ", i)
+        temp[i] = id;
+        tempFrames[i] = canvasStream;
+        this.setState({
+          frameIds: temp,
+          frames: tempFrames,
+        });
+        console.log("this is real", this.state.frameIds);
+        const body = {
+          project: this.state.project,
+          order: this.state.frameIds,
+        }
+        post("/api/updateFrameList", body).then((hi) => {
+          console.log("HIIIII", hi)
+        })
+
+        //this.state.frameIds[this.state.currentFrame - 1] = id;
+
+        // const bodyGet = {
+        //   project: this.state.project,
+        //   idSend: id,
+        // };
+        // get("/api/getFrame", bodyGet).then((frame) => {
+        //   var temp = this.state.frames;
+        //   temp[i] = frame.data;
+        //   this.setState({frames: temp});
+        // });
       });
-      //console.log("test2", canvasStream);
-      this.state.frames[i] = canvasStream;
-      console.log(this.state.frames)
     }
 
-    setFrame = (id, i, stream) => {
-      const body = {
-        project: this.state.project,
-        idSend: id,
-      };
-      get("/api/getFrame", body).then((frame) => {
-        console.log("idk test: ", frame.data === stream);
-        //console.log(frame.data);
-        //console.log(stream);
-        //console.log("test1 ", frame.data)
-        return frame.data;
-      });
-    }
+
 
     createNewFrame = () => {
+      const curr = this.state.currentFrame
+      var tempFrames = this.state.frames;
+      var tempIds = this.state.frameIds;
+      tempFrames.splice(curr+1, 0, null);
+      tempIds.splice(curr+1, 0, null);
+      const prev = this.state.frameIds;
       this.setState({
-        currentFrame: this.state.currentFrame+1,
+        frames: tempFrames,
+        frameIds: tempIds,
+        currentFrame: curr + 1,
         newFrame: true,
+      }, () => {
+        console.log("State before: ", prev);
+        console.log("Current state: ", this.state.frameIds)
       })
-      this.state.frames.splice(this.state.currentFrame, 0, null);
-      this.state.frameIds.splice(this.state.currentFrame, 0, null);
-
+      //})
+      
+      
+      // this.state.frames.splice(this.state.currentFrame, 0, null);
+      // this.state.frameIds.splice(this.state.currentFrame, 0, null);
+      
+      
     }
 
     setNewFrameFalse = ()  => {
@@ -221,6 +298,10 @@ class Studio extends React.Component {
         play: false,
       })
     }
+
+    // componentDidUpdate() {
+    //   this.getProjects();
+    // }
   
     render() {
       return (
@@ -259,18 +340,16 @@ class Studio extends React.Component {
               Colorchanger = {(e) => this.changeColor(e)}
             />
             <div>
-              <button onClick={() => getFrames(this.state)}>test</button>
+              <button onClick={() => this.getProjects()}>test</button>
               <button onClick={() => showFrame(this.state, this.state.canvas)}>show frame</button>
-              <button onClick={() => addProject()}>add project</button>
+              <button onClick={() => this.addProject()}>add project</button>
             </div>
             <div className="dropdown">
               <button class="dropbtn">Dropdown
       `         <i class="fa fa-caret-down"></i>
               </button>
               <div class="dropdown-content">
-                <a href="#">Link 1</a>
-                <a href="#">Link 2</a>
-                <a href="#">Link 3</a>
+                {this.state.projects}
               </div>
             </div>
         </>
