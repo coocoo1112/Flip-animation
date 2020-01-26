@@ -90,6 +90,7 @@ class Studio extends React.Component {
           },
           mouseDown: false,
           color: "000000",
+          thickness: 1,
           canvas: null,
           currentFrame: 0,
           frames: [null],
@@ -105,9 +106,17 @@ class Studio extends React.Component {
     }
 
     changeColor(e) {
-      this.setState({
-        color: e.target.id,
-      })
+      if (e.target.id === "eraser") {
+        this.setState({
+          color: "white",
+          thickness: 30,
+        });
+      } else {
+        this.setState({
+          color: e.target.id,
+          thickness: 1,
+        })
+      }
     }
     
     addProject() {
@@ -312,6 +321,7 @@ class Studio extends React.Component {
               currentFrame={this.state.currentFrame}
               frames={this.state.frames}
               color={this.state.color}
+              thickness={this.state.thickness}
               saveFrame={this.saveCanvasImage}
               newFrame = {this.state.newFrame}
               setNewFrameFalse = {this.setNewFrameFalse}
