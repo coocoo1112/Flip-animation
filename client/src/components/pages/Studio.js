@@ -172,41 +172,49 @@ class Studio extends React.Component {
     render() {
       return (
         <>
-            <FlipCanvas
-              className="flipCanvas"
-              currentFrame={this.state.currentFrame}
-              frames={this.state.frames}
-              color={this.state.color}
-              thickness={this.state.thickness}
-              saveFrame={this.saveCanvasImage}
-              newFrame = {this.state.newFrame}
-              setNewFrameFalse = {this.setNewFrameFalse}
-              switchFrame = {this.state.switchFrame}
-              setSwitchFrameFalse = {this.setSwitchFrameFalse}
-              prevFrame = {this.state.prevFrame}
-              play = {this.state.play}
-              setPlayAnimationFalse = {this.setPlayAnimationFalse}
-            />
-            <div>
-              <button onClick={() => this.goToFrame(this.state.currentFrame-1)}>Previous</button>
-              <button onClick={() => this.goToFrame(this.state.currentFrame+1)}>Next</button>
-              <button onClick={() => this.createNewFrame()}>New Frame</button>
+          <div className = "StudioPageContainer">
+            <div className = "StudioContainer">
+              <FlipCanvas
+                className="flipCanvas"
+                currentFrame={this.state.currentFrame}
+                frames={this.state.frames}
+                color={this.state.color}
+                thickness={this.state.thickness}
+                saveFrame={this.saveCanvasImage}
+                newFrame = {this.state.newFrame}
+                setNewFrameFalse = {this.setNewFrameFalse}
+                switchFrame = {this.state.switchFrame}
+                setSwitchFrameFalse = {this.setSwitchFrameFalse}
+                prevFrame = {this.state.prevFrame}
+                play = {this.state.play}
+                setPlayAnimationFalse = {this.setPlayAnimationFalse}
+              />
+              <div className = "ButtonsContainer">
+                <button onClick={() => this.goToFrame(this.state.currentFrame-1)}>Previous</button>
+                <button onClick={() => this.goToFrame(this.state.currentFrame+1)}>Next</button>
+                <button onClick={() => this.createNewFrame()}>New Frame</button>
+                <button onClick={() => getFrames(this.state)}>test</button>
+                <button onClick={() => addProject()}>add project</button>
+              </div>
+              <div className = "PlayButtonContainer">
+                <img src={require("../../../../assets/Play Button.png")} onClick={this.PlayAnimation} className = "playButton"/>
+              </div>
+              <div className = "ThumbNailBarContainer">
+                <ThumbnailBar 
+                  className="Thumbnails"
+                  numFrames={this.state.frames.length}
+                  currentFrame = {this.state.currentFrame}
+                  goToFrame = {this.goToFrame}
+                  frames = {this.state.frames}
+                />
+              </div>
+             </div>
+            <div className = "ToolBarContainer">
+              <ToolNavBar
+                Colorchanger = {(e) => this.changeColor(e)}
+              />
             </div>
-            <div>
-              <button onClick={this.PlayAnimation}>Play</button>
-            </div>
-            <ThumbnailBar 
-              className="Thumbnails"
-              numFrames={this.state.frames.length}
-              currentFrame = {this.state.currentFrame}
-              goToFrame = {this.goToFrame}
-              frames = {this.state.frames}
-            />
-            <ToolNavBar
-              Colorchanger = {(e) => this.changeColor(e)}
-            />
-            <button onClick={() => getFrames(this.state)}>test</button>
-            <button onClick={() => addProject()}>add project</button>
+          </div>
         </>
       )  
     }

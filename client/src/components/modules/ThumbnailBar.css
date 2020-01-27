@@ -1,8 +1,5 @@
 .HorizontalScroller {
-    position: absolute;
     background-color: var(--grey);
-    bottom: 5%;
-    margin-left: 10%;
     width: 60%;
     height: 10%;
     border-radius: 20px;

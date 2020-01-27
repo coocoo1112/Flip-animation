@@ -3,15 +3,55 @@ body{
     background-color: var(--light-yellow);
 }
 
+.StudioPageContainer{
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.StudioContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items:center;
+    width: 80%;
+    height: 100vh;
+}
+
+.ToolBarContainer{
+    display: flex;
+    align-items: center;
+    width: 20%;
+    height:100vh;
+}
+
 .projectName {
     position: absolute;
     top:0;
-
     text-align: center;
 }
 
-.filpCanvas {
+.flipCanvas {
     position: relative;
+    height: 70%;
     /* text-align: center; */
     /* left: 100px; */
+}
+
+.ButtonsContainer{
+    height: 10%;
+}
+
+.PlayButtonContainer{
+    height: 10%;
+}
+
+.ThumbNailBarContainer{
+    height: 10%;
+}
+
+.playButton{
+    width : 50%;
+    height : 50%;
 }

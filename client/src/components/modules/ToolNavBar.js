@@ -17,7 +17,8 @@ class ToolNavBar extends Component {
     return (
     
     <div class="footer" id="right">
-      <div className="CurrentTool">
+      <div className="CurrentToolTitle">
+        this.state.CurrentTool
       </div>
       <div className="CurrentToolContainer">
         <button
@@ -45,7 +46,7 @@ class ToolNavBar extends Component {
           onClick = {this.props.Colorchanger}
         ></button>
       </div>
-      <div className="Tools">
+      <div className="ToolBar">
         Text.
       </div>
     </div>
