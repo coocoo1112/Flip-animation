@@ -37,7 +37,7 @@ class FlipCanvas extends Component {
         ctx.fillStyle = "White";
         ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         ctx.beginPath();
-
+        ctx.fillStyle = "black";
         this.canvas2 = this.canvasRef2.current;
         this.ctx2 = this.canvas2.getContext('2d');
         this.ctx2.globalAlpha = 0.2;
@@ -65,6 +65,8 @@ class FlipCanvas extends Component {
 
               if ((this.state.mouse_coord.previous_x != null) && 
               ((this.state.mouse_coord.previous_x != mouse.x) || (this.state.mouse_coord.previous_y != mouse.y))) {
+
+                ctx.lineCap = 'round';
                 ctx.moveTo(this.state.mouse_coord.previous_x, this.state.mouse_coord.previous_y);
                 ctx.lineTo(mouse.x, mouse.y);
                 ctx.stroke(); 
