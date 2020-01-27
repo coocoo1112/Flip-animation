@@ -52,7 +52,7 @@ body {
 
 .CurrentToolContainer {
   position: absolute;
-  top: 50%;
+  top: 10%;
 }
 
 .ChangeColor {
@@ -61,7 +61,12 @@ body {
   width: 30px;
   height: 30px;
   border-radius: 15px;
-  margin-left: 10px
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+#ED3333 {
+  background-color: #ED3333;
 }
 
 #red {

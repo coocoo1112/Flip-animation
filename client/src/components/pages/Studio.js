@@ -109,12 +109,11 @@ class Studio extends React.Component {
       if (e.target.id === "eraser") {
         this.setState({
           color: "white",
-          thickness: 30,
         });
       } else {
+        console.log(e.target.id);
         this.setState({
-          color: e.target.id,
-          thickness: 1,
+          color: "#"+e.target.id,
         })
       }
     }
