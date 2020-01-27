@@ -207,6 +207,7 @@ class Studio extends React.Component {
     }
 
     saveCanvasImage = (canvas, i) => {
+      this.state.frames[i] = canvas.toDataURL("image/png");
       var canvasStream = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
       console.log(canvasStream);
       //window.location.href=canvasStream;
