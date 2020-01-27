@@ -123,6 +123,12 @@ class Studio extends React.Component {
       }
     }
 
+    changeThickness = (newThickness) => {
+      this.setState({
+        thickness: newThickness,
+      })
+    }
+
     saveCanvasImage = (canvas, i) => {
       this.state.frames[i] = canvas.toDataURL("image/png");
     }
@@ -204,6 +210,7 @@ class Studio extends React.Component {
             />
             <ToolNavBar
               Colorchanger = {(e) => this.changeColor(e)}
+              changeThickness = {this.changeThickness}
             />
             <button onClick={() => getFrames(this.state)}>test</button>
             <button onClick={() => addProject()}>add project</button>
