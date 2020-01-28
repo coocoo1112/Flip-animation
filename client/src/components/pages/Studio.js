@@ -90,7 +90,7 @@ class Studio extends React.Component {
           },
           mouseDown: false,
           color: "000000",
-          thickness: 1,
+          thickness: 10,
           canvas: null,
           currentFrame: 0,
           frames: [null],
@@ -101,6 +101,8 @@ class Studio extends React.Component {
           prevFrame: 0,
           play: false,
           projects: [null],
+          clearFrame: false,
+          playbackSpeed: 1000,
         };
       this.fs = require("fs");
     }
@@ -280,6 +282,36 @@ class Studio extends React.Component {
       
     }
 
+    deleteFrame = () => {
+      const curr = this.state.currentFrame
+      var tempFrames = this.state.frames;
+      var tempIds = this.state.frameIds;
+      tempFrames.splice(curr, 1);
+      tempIds.splice(curr, 1);
+      const prev = this.state.frameIds;
+      this.setState({
+        frames: tempFrames,
+        frameIds: tempIds,
+        currentFrame: curr,
+        switchFrame: true,
+      }, () => {
+        console.log("State before: ", prev);
+        console.log("Current state: ", this.state.frameIds)
+      })
+    }
+
+    clearFrame = () => {
+      this.setState({
+        clearFrame: true,
+      })
+    }
+
+    setClearFrameFalse = () => {
+      this.setState({
+        clearFrame: false,
+      })
+    }
+
     setNewFrameFalse = ()  => {
       this.setState({
         newFrame: false,
@@ -317,6 +349,11 @@ class Studio extends React.Component {
     // componentDidUpdate() {
     //   this.getProjects();
     // }
+    changePlaybackSpeed = (newSpeed) => {
+      this.setState({
+        playbackSpeed: newSpeed,
+      })
+    }
   
     render() {
       return (
@@ -335,15 +372,20 @@ class Studio extends React.Component {
               setSwitchFrameFalse = {this.setSwitchFrameFalse}
               prevFrame = {this.state.prevFrame}
               play = {this.state.play}
+              clearFrame = {this.state.clearFrame}
               setPlayAnimationFalse = {this.setPlayAnimationFalse}
+              playbackSpeed = {this.state.playbackSpeed}
             />
             <div>
               <button onClick={() => this.goToFrame(this.state.currentFrame-1)}>Previous</button>
               <button onClick={() => this.goToFrame(this.state.currentFrame+1)}>Next</button>
               <button onClick={() => this.createNewFrame()}>New Frame</button>
+              <button >Repeat Frame</button>
             </div>
             <div>
               <button onClick={this.PlayAnimation}>Play</button>
+              <button onClick={this.clearFrame}>ClearFrame</button>
+              <button onClick={this.deleteFrame}>DeleteFrame</button>
             </div>
             <ThumbnailBar 
               className="Thumbnails"
@@ -355,6 +397,8 @@ class Studio extends React.Component {
             <ToolNavBar
               Colorchanger = {(e) => this.changeColor(e)}
               changeThickness = {this.changeThickness}
+              changePlaybackSpeed = {this.changePlaybackSpeed}
+              playbackSpeed = {this.state.playbackSpeed}
             />
             <div>
               <button onClick={() => this.getProjects()}>test</button>

@@ -10,22 +10,25 @@ class ToolNavBar extends Component {
     super(props);
     this.state = {
       loggedIn: false,
-      value: 0,
+      value: 10,
     };
     this.sliderRef = React.createRef();
     this.slider = null;
+    this.playbackRef = React.createRef();
+    this.playback = null;
   }
 
   componentDidMount() {
     // console.log("hi");
     this.slider = this.sliderRef.current;
+    this.playback = this.playbackRef.current;
     console.log(this.slider);
     console.log(this.slider.value);
     // this.value = this.slider.value;
     this.setState({
       value: this.slider.value,
     })
-    this.slider.value = 1;
+    this.slider.value = 15;
     // output.innerHTML = sliderValue
     // this.props.thickness = this.slider.vlaue;
   }
@@ -36,6 +39,11 @@ class ToolNavBar extends Component {
     })
     // this.props.thickness = this.slider.value;
     this.props.changeThickness(this.slider.value);
+  }
+
+  playbackChange = () => {
+    console.log("change to", this.playback.value);
+    this.props.changePlaybackSpeed(this.playback.value);
   }
 
   ColorButton(color) {
@@ -69,9 +77,9 @@ class ToolNavBar extends Component {
         <div>
           <input type="range" min="1" max="100" class="slider" id="myRange" ref={this.sliderRef} onChange={this.sliderChange}/>
           { this.slider ? (
-            <div>Slider Value: {this.slider.value}</div>
+            <div>Line Width: {this.slider.value}</div>
           ) : (
-            <div>Slider Value: {this.state.value}</div>
+            <div>Line Width: {this.state.value}</div>
           )}
           
         </div>
@@ -115,7 +123,8 @@ class ToolNavBar extends Component {
           {this.ColorButton("353737")}
           {this.ColorButton("000000")}
         </div>
-        
+        <div>PlayBack Speed: {this.props.playbackSpeed}</div>
+        <input type="range" id="playbackSpeed" min="200" max="2000" step="100" ref={this.playbackRef} onChange={this.playbackChange}/>
         
       </div>
       <div className="Tools">

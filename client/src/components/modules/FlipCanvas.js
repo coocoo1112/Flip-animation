@@ -135,37 +135,51 @@ class FlipCanvas extends Component {
             this.props.setSwitchFrameFalse();
         }
 
+        if (this.props.clearFrame) {
+            this.blankCanvas();
+        }
+
         if (this.props.play) {
-            console.log("hi there");
-            console.log("current", this.state.playFrame);
-            console.log("total",this.props.frames.length);
-            if (this.state.playFrame == 0) {
-                this.props.saveFrame(this.canvas, this.props.currentFrame);
-                console.log("play frame");
-                this.loadFrame(this.state.playFrame);
-                this.setState({
-                    playFrame: this.state.playFrame+1,
-                })
-            }
-            if (this.state.playFrame == this.props.frames.length) {
-                console.log("finish animation");
-                this.setState({
-                    playFrame: 0,
-                })
-                this.props.setPlayAnimationFalse();
-            } else {
-                console.log("load frame", this.state.playFrame);
+            // console.log("current", this.state.playFrame);
+            // console.log("total",this.props.frames.length);
+            // if (this.state.playFrame == 0) {
+            //     this.props.saveFrame(this.canvas, this.props.currentFrame);
+            //     console.log("play frame");
+            //     this.loadFrame(this.state.playFrame);
+            //     this.setState({
+            //         playFrame: this.state.playFrame+1,
+            //     })
+            // }
+            // if (this.state.playFrame == this.props.frames.length) {
+            //     console.log("finish animation");
+            //     this.setState({
+            //         playFrame: 0,
+            //     })
+            //     this.props.setPlayAnimationFalse();
+            // } else {
+            //     console.log("load frame", this.state.playFrame);
                 
                 
-                setTimeout(() => { 
-                    console.log("play frame");
-                    this.loadFrame(this.state.playFrame);
-                    this.setState({
-                        playFrame: this.state.playFrame+1,
-                    })
+            //     setTimeout(() => { 
+            //         console.log("play frame");
+            //         this.loadFrame(this.state.playFrame);
+            //         this.setState({
+            //             playFrame: this.state.playFrame+1,
+            //         })
                     
-                }, 1000);
-            }
+            //     }, 1000);
+            // }
+            console.log("start animation");
+            var frame = 0;
+            var animationInterval = setInterval(() => {
+                console.log("curent frame", frame);
+                this.loadFrame(frame);
+                frame += 1;
+                if (frame == this.props.frames.length) {
+                    window.clearInterval(animationInterval);
+                }
+            }, this.props.playbackSpeed);
+            this.props.setPlayAnimationFalse();
         }
     }
 
