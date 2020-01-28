@@ -137,6 +137,7 @@ class FlipCanvas extends Component {
 
         if (this.props.clearFrame) {
             this.blankCanvas();
+            this.props.setClearFrameFalse();
         }
 
         if (this.props.play) {

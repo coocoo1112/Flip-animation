@@ -347,9 +347,6 @@ class Studio extends React.Component {
       })
     }
 
-    // componentDidUpdate() {
-    //   this.getProjects();
-    // }
     changePlaybackSpeed = (newSpeed) => {
       this.setState({
         playbackSpeed: newSpeed,
@@ -384,6 +381,7 @@ class Studio extends React.Component {
               prevFrame = {this.state.prevFrame}
               play = {this.state.play}
               clearFrame = {this.state.clearFrame}
+              setClearFrameFalse = {this.setClearFrameFalse}
               setPlayAnimationFalse = {this.setPlayAnimationFalse}
               playbackSpeed = {this.state.playbackSpeed}
               viewPreviousFrame = {this.state.viewPreviousFrame}
@@ -420,7 +418,7 @@ class Studio extends React.Component {
             </div>
             <div className="dropdown">
               <button class="dropbtn">Dropdown
-      `         <i class="fa fa-caret-down"></i>
+               <i class="fa fa-caret-down"></i>
               </button>
               <div class="dropdown-content">
                 {this.state.projects}
