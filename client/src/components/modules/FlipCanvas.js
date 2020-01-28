@@ -37,7 +37,7 @@ class FlipCanvas extends Component {
         ctx.fillStyle = "White";
         ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         ctx.beginPath();
-
+        ctx.fillStyle = "black";
         this.canvas2 = this.canvasRef2.current;
         this.ctx2 = this.canvas2.getContext('2d');
         this.ctx2.globalAlpha = 0.2;
@@ -65,6 +65,8 @@ class FlipCanvas extends Component {
 
               if ((this.state.mouse_coord.previous_x != null) && 
               ((this.state.mouse_coord.previous_x != mouse.x) || (this.state.mouse_coord.previous_y != mouse.y))) {
+
+                ctx.lineCap = 'round';
                 ctx.moveTo(this.state.mouse_coord.previous_x, this.state.mouse_coord.previous_y);
                 ctx.lineTo(mouse.x, mouse.y);
                 ctx.stroke(); 
@@ -122,48 +124,37 @@ class FlipCanvas extends Component {
             this.props.saveFrame(this.canvas, this.props.currentFrame-1);
             //console.log("1");
             this.blankCanvas();
-            this.loadFrame(this.props.currentFrame, true);
+            this.loadFrame(this.props.currentFrame, this.props.viewPreviousFrame);
             this.props.setNewFrameFalse();
         }
 
         if (this.props.switchFrame) {
             console.log("previous frame: ", this.props.prevFrame)
             this.props.saveFrame(this.canvas, this.props.prevFrame);
-            this.loadFrame(this.props.currentFrame, true);
+            this.loadFrame(this.props.currentFrame, this.props.viewPreviousFrame);
             this.props.setSwitchFrameFalse();
         }
 
+        if (this.props.clearFrame) {
+            this.blankCanvas();
+        }
+
         if (this.props.play) {
-            console.log("hi there");
-            console.log("current", this.state.playFrame);
-            console.log("total",this.props.frames.length);
-            if (this.state.playFrame == 0) {
-                this.props.saveFrame(this.canvas, this.props.currentFrame);
-                console.log("play frame");
-                this.loadFrame(this.state.playFrame);
-                this.setState({
-                    playFrame: this.state.playFrame+1,
-                })
-            }
-            if (this.state.playFrame == this.props.frames.length) {
-                console.log("finish animation");
-                this.setState({
-                    playFrame: 0,
-                })
-                this.props.setPlayAnimationFalse();
-            } else {
-                console.log("load frame", this.state.playFrame);
-                
-                
-                setTimeout(() => { 
-                    console.log("play frame");
-                    this.loadFrame(this.state.playFrame);
-                    this.setState({
-                        playFrame: this.state.playFrame+1,
-                    })
-                    
-                }, 1000);
-            }
+
+            this.props.saveFrame(this.canvas, this.props.currentFrame);
+            console.log("start animation");
+            var frame = 0;
+            var animationInterval = setInterval(() => {
+                console.log("curent frame", frame);
+                this.loadFrame(frame);
+                frame += 1;
+                if (frame == this.props.frames.length) {
+                    window.clearInterval(animationInterval);
+                    this.props.goToFrame(this.props.frames.length - 1);
+                }
+            }, this.props.playbackSpeed);
+            this.props.setPlayAnimationFalse();
+            
         }
     }
 
@@ -175,7 +166,7 @@ class FlipCanvas extends Component {
               <div className="Shadow2"></div>
               <div className="Shadow1"></div>
               
-              <canvas width="700" height="500" ref={this.canvasRef} class="Canvas" />
+              <canvas width="700" height="500" ref={this.canvasRef} class="Canvas"/>
 
               <canvas width="700" height="500" ref={this.canvasRef2} class="Canvas"/>
             </div>

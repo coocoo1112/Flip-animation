@@ -5,10 +5,17 @@ body {
   overflow: hidden
 }
 
+.ToolContainer{
+  display: flex;
+  flex-direction: column;
+  height: 80%;
+  width: 100%;
+  justify-content: center;
+}
 #right {
   /*background-color: var(--other-yellow);*/
   width: 100%;
-  height: 80%;
+  height: 60%;
   /* border: 3px solid #73AD21; */
   /* padding: 10px; */
   border-radius: 20px 0 0 0;
@@ -19,8 +26,6 @@ body {
   /* flex-flow: column wrap; */
   /* justify-content: space-around; */
   padding:0;
-  display: flex;
-  flex-direction: column;
 }
 
 .toolName {
@@ -32,22 +37,15 @@ body {
   background-color: var(--main-yellow);
   height: 10%;
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   border-radius: 0 0 0 20px;
 }
 
 .CurrentToolTitle {
-  top: 0;
+  /*top: 0;*/
   width: 100%;
   height: 10%;
-  display: flex;
   background-color: var(--main-yellow);
   border-radius: 20px 0 0 0;
-  align-items: center;
-  justify-content: center;
-  font-size: large;
 }
 
 .CurrentToolContainer {
@@ -71,8 +69,13 @@ body {
 
 .buttonColorContainer{
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.fps {
+  direction: rtl;
 }
 
 #ED3333 {
