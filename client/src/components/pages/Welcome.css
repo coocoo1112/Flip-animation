@@ -5,22 +5,22 @@ body{
     margin-top: 0;
 } */
 
-.CanvasContainer {
+.WelcomeCanvasContainer {
     position: absolute;
     text-align: center;
     margin: 0;
     z-index: 0;
 }
 
-.Canvas {
+.WelcomeCanvas {
     border-radius: 0;
 }
 
-.fullContainer{
+.WelcomefullContainer{
     height: 100vh;
 }
 
-.itemContainer {
+.WelcomeitemContainer {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -32,7 +32,7 @@ body{
     /*vertical-align: middle;*/
 }
 
-.subContainer{
+.WelcomesubContainer{
     /* justify-content: center;
     align-items: center; */
     /* background-color: red; */

@@ -49,18 +49,18 @@ class Welcome extends Component {
     render() {
       return (
         <>
-          <div className="canvasContainer"> 
+          <div className="WelcomecanvasContainer"> 
             <canvas width={innerWidth} height={innerHeight} ref={this.canvasRef} class="Canvas" />
           </div>
-          <div className="fullContainer">
-            <div className="itemContainer">
-              <div className="subContainer">
+          <div className="WelcomefullContainer">
+            <div className="WelcomeitemContainer">
+              <div className="WelcomesubContainer">
                 <div class="welcomeText">Welcome To</div>
               </div>
-              <div className="subContainer">
+              <div className="WelcomesubContainer">
                 <img src = {require("../../../../assets/flip_logo-2.png")} class="bigLogo"/>
               </div>
-              <div className="subContainer">
+              <div className="WelcomesubContainer">
                 {this.props.userId ? (
                   <GoogleLogout
                     clientId={GOOGLE_CLIENT_ID}
