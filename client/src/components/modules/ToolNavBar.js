@@ -46,8 +46,8 @@ class ToolNavBar extends Component {
   }
 
   playbackChange = () => {
-    console.log("change to", -1*this.playback.value);
-    this.props.changePlaybackSpeed(this.playback.value*-1);
+    console.log("change to", 1000/this.playback.value);
+    this.props.changePlaybackSpeed(1000/this.playback.value);
   }
 
   ColorButton(color) {
@@ -127,8 +127,8 @@ class ToolNavBar extends Component {
           {this.ColorButton("353737")}
           {this.ColorButton("000000")}
         </div>
-        <div>PlayBack Speed: {1000/this.props.playbackSpeed} fps</div>
-        <input type="range" id="playbackSpeed" max="-100" min="-2000" step="200" ref={this.playbackRef} onChange={this.playbackChange}/>
+        <div>PlayBack Speed: {Math.round(1000/this.props.playbackSpeed)} fps</div>
+        <input type="range" id="playbackSpeed" max="20" min="1" ref={this.playbackRef} onChange={this.playbackChange}/>
         <div>
           <label>view previous frame:</label>
             <input type="checkbox" class="fps"ref={this.viewPrevRef} onChange={() => {

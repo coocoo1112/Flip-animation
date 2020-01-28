@@ -151,11 +151,13 @@ class FlipCanvas extends Component {
                 frame += 1;
                 if (frame == this.props.frames.length) {
                     window.clearInterval(animationInterval);
-                    this.props.goToFrame(this.props.frames.length - 1);
+                    // this.props.goToFrame(this.props.frames.length - 1);
+                    if (this.props.currentFrame != this.props.frames.length-1) {
+                        this.props.goToFrame(this.props.frames.length - 1);
+                    }
                 }
             }, this.props.playbackSpeed);
             this.props.setPlayAnimationFalse();
-            
         }
     }
 
