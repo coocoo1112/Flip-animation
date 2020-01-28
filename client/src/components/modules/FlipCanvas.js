@@ -140,35 +140,8 @@ class FlipCanvas extends Component {
         }
 
         if (this.props.play) {
-            // console.log("current", this.state.playFrame);
-            // console.log("total",this.props.frames.length);
-            // if (this.state.playFrame == 0) {
-            //     this.props.saveFrame(this.canvas, this.props.currentFrame);
-            //     console.log("play frame");
-            //     this.loadFrame(this.state.playFrame);
-            //     this.setState({
-            //         playFrame: this.state.playFrame+1,
-            //     })
-            // }
-            // if (this.state.playFrame == this.props.frames.length) {
-            //     console.log("finish animation");
-            //     this.setState({
-            //         playFrame: 0,
-            //     })
-            //     this.props.setPlayAnimationFalse();
-            // } else {
-            //     console.log("load frame", this.state.playFrame);
-                
-                
-            //     setTimeout(() => { 
-            //         console.log("play frame");
-            //         this.loadFrame(this.state.playFrame);
-            //         this.setState({
-            //             playFrame: this.state.playFrame+1,
-            //         })
-                    
-            //     }, 1000);
-            // }
+
+            this.props.saveFrame(this.canvas, this.props.currentFrame);
             console.log("start animation");
             var frame = 0;
             var animationInterval = setInterval(() => {
@@ -177,9 +150,11 @@ class FlipCanvas extends Component {
                 frame += 1;
                 if (frame == this.props.frames.length) {
                     window.clearInterval(animationInterval);
+                    this.props.goToFrame(this.props.frames.length - 1);
                 }
             }, this.props.playbackSpeed);
             this.props.setPlayAnimationFalse();
+            
         }
     }
 
@@ -191,7 +166,7 @@ class FlipCanvas extends Component {
               <div className="Shadow2"></div>
               <div className="Shadow1"></div>
               
-              <canvas width="700" height="500" ref={this.canvasRef} class="Canvas" />
+              <canvas width="700" height="500" ref={this.canvasRef} class="Canvas"/>
 
               <canvas width="700" height="500" ref={this.canvasRef2} class="Canvas"/>
             </div>

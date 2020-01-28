@@ -369,6 +369,7 @@ class Studio extends React.Component {
               newFrame = {this.state.newFrame}
               setNewFrameFalse = {this.setNewFrameFalse}
               switchFrame = {this.state.switchFrame}
+              goToFrame = {this.goToFrame}
               setSwitchFrameFalse = {this.setSwitchFrameFalse}
               prevFrame = {this.state.prevFrame}
               play = {this.state.play}
