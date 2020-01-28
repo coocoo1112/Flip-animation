@@ -120,12 +120,16 @@ class FlipCanvas extends Component {
         this.ctx.lineWidth = this.props.thickness;
 
         if (this.props.newFrame) {
-            //console.log("new");
             this.props.saveFrame(this.canvas, this.props.currentFrame-1);
-            //console.log("1");
             this.blankCanvas();
             this.loadFrame(this.props.currentFrame, this.props.viewPreviousFrame);
             this.props.setNewFrameFalse();
+        }
+
+        if (this.props.repeatFrame) {
+            this.props.saveFrame(this.canvas, this.props.currentFrame-1);
+            this.loadFrame(this.props.currentFrame, this.props.viewPreviousFrame);
+            this.props.setRepeatFrameFalse();
         }
 
         if (this.props.deleteFrame) {

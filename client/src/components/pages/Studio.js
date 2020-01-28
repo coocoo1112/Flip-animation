@@ -105,6 +105,7 @@ class Studio extends React.Component {
           clearFrame: false,
           playbackSpeed: 1000,
           viewPreviousFrame: true,
+          repeatFrame: false,
         };
       this.fs = require("fs");
     }
@@ -297,6 +298,26 @@ class Studio extends React.Component {
       })
     }
 
+    createRepeatFrame = () => {
+      const curr = this.state.currentFrame;
+      var tempFrames = this.state.frames;
+      var tempIds = this.state.frameIds;
+      tempFrames.splice(curr+1, 0, null);
+      tempIds.splice(curr+1, 0, null);
+      this.setState({
+        frames: tempFrames,
+        frameIds: tempIds,
+        repeatFrame: true,
+        currentFrame: curr + 1,
+      })
+    }
+
+    setRepeatFrameFalse = () => {
+      this.setState({
+        repeatFrame: false,
+      })
+    }
+
     clearFrame = () => {
       this.setState({
         clearFrame: true,
@@ -389,12 +410,14 @@ class Studio extends React.Component {
               setPlayAnimationFalse = {this.setPlayAnimationFalse}
               playbackSpeed = {this.state.playbackSpeed}
               viewPreviousFrame = {this.state.viewPreviousFrame}
+              repeatFrame = {this.state.repeatFrame}
+              setRepeatFrameFalse = {this.setRepeatFrameFalse}
             />
             <div>
               <button onClick={() => this.goToFrame(this.state.currentFrame-1)}>Previous</button>
               <button onClick={() => this.goToFrame(this.state.currentFrame+1)}>Next</button>
               <button onClick={() => this.createNewFrame()}>New Frame</button>
-              <button >Repeat Frame</button>
+              <button onClick={this.createRepeatFrame}>Repeat Frame</button>
             </div>
             <div>
               <button onClick={this.PlayAnimation}>Play</button>
