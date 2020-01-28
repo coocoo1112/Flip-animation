@@ -50,7 +50,7 @@ class Welcome extends Component {
       return (
         <>
           <div className="WelcomecanvasContainer"> 
-            <canvas width={innerWidth} height={innerHeight} ref={this.canvasRef} class="Canvas" />
+            <canvas width={innerWidth} height={innerHeight} ref={this.canvasRef} class="WelcomeCanvas" />
           </div>
           <div className="WelcomefullContainer">
             <div className="WelcomeitemContainer">

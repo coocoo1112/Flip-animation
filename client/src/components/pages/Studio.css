@@ -4,10 +4,15 @@ body{
 }
 
 .StudioPageContainer{
-    height: 100vh;
+    height: 80%;
+    position: absolute;
+    width: 100%;
+}
+
+.StudioandToolBarContainer{
     display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 100%;
+    height: 100%;
 }
 
 .StudioContainer{
@@ -16,14 +21,14 @@ body{
     justify-content: center;
     align-items:center;
     width: 80%;
-    height: 100vh;
+    /*height: 100vh;*/
 }
 
 .ToolBarContainer{
     display: flex;
     align-items: center;
     width: 20%;
-    height:100vh;
+    /*height:100vh;*/
 }
 
 .projectName {
@@ -40,19 +45,39 @@ body{
 }
 
 .ButtonsContainer{
-    height: 10%;
+    display: flex;
+    width: 50%;
+    height: 35px;
+    justify-content: space-evenly;
+}
+
+.FrameButton{
+    /*background-color: #84AAAA;*/
+    background-color: var(--other-yellow);
+    border: none;
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--main-green);
+    border-radius: 8px;
+    width: 20%;
 }
 
 .PlayButtonContainer{
-    height: 10%;
+    height: 100%;
+    /*width: 5%;*/
 }
 
 .ThumbNailBarContainer{
     height: 10%;
+    width: 100%;
+    display: flex;
+    bottom: 0;
+    position: absolute;
 }
 
 .playButton{
-    height : 50%;
+    height : 100%;
 }
 
 .dropdown {

@@ -52,7 +52,7 @@ class App extends Component {
   render() {
     return (
       <>
-        {this.state.userId || true?  (
+        {this.state.userId?  (
           <>
           <NavBar/>
           <div>

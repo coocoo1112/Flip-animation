@@ -13,7 +13,7 @@ body{
 }
 
 .WelcomeCanvas {
-    border-radius: 0;
+    position: absolute;
 }
 
 .WelcomefullContainer{
