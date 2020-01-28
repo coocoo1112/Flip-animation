@@ -103,6 +103,7 @@ class Studio extends React.Component {
           projects: [null],
           clearFrame: false,
           playbackSpeed: 1000,
+          viewPreviousFrame: true,
         };
       this.fs = require("fs");
     }
@@ -354,6 +355,15 @@ class Studio extends React.Component {
         playbackSpeed: newSpeed,
       })
     }
+
+    changeViewPreviousFrame = (bool) => {
+      this.setState({
+        viewPreviousFrame: bool,
+        prevFrame: this.state.currentFrame,
+        currentFrame: this.state.currentFrame,
+        switchFrame: true,
+      })
+    }
   
     render() {
       return (
@@ -376,6 +386,7 @@ class Studio extends React.Component {
               clearFrame = {this.state.clearFrame}
               setPlayAnimationFalse = {this.setPlayAnimationFalse}
               playbackSpeed = {this.state.playbackSpeed}
+              viewPreviousFrame = {this.state.viewPreviousFrame}
             />
             <div>
               <button onClick={() => this.goToFrame(this.state.currentFrame-1)}>Previous</button>
@@ -400,6 +411,7 @@ class Studio extends React.Component {
               changeThickness = {this.changeThickness}
               changePlaybackSpeed = {this.changePlaybackSpeed}
               playbackSpeed = {this.state.playbackSpeed}
+              changeViewPreviousFrame = {this.changeViewPreviousFrame}
             />
             <div>
               <button onClick={() => this.getProjects()}>test</button>

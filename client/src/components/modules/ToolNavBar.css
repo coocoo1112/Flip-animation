@@ -65,6 +65,10 @@ body {
   margin-top: 10px;
 }
 
+.fps {
+  direction: rtl;
+}
+
 #ED3333 {
   background-color: #ED3333;
 }

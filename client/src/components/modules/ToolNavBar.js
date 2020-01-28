@@ -16,12 +16,16 @@ class ToolNavBar extends Component {
     this.slider = null;
     this.playbackRef = React.createRef();
     this.playback = null;
+    this.viewPrevRef = React.createRef();
+    this.viewPrev = null;
   }
 
   componentDidMount() {
     // console.log("hi");
     this.slider = this.sliderRef.current;
     this.playback = this.playbackRef.current;
+    this.viewPrev = this.viewPrevRef.current;
+    this.viewPrev.checked = true;
     console.log(this.slider);
     console.log(this.slider.value);
     // this.value = this.slider.value;
@@ -42,7 +46,7 @@ class ToolNavBar extends Component {
   }
 
   playbackChange = () => {
-    console.log("change to", this.playback.value);
+    console.log("change to", -1*this.playback.value);
     this.props.changePlaybackSpeed(this.playback.value);
   }
 
@@ -123,9 +127,15 @@ class ToolNavBar extends Component {
           {this.ColorButton("353737")}
           {this.ColorButton("000000")}
         </div>
-        <div>PlayBack Speed: {this.props.playbackSpeed}</div>
-        <input type="range" id="playbackSpeed" min="200" max="2000" step="100" ref={this.playbackRef} onChange={this.playbackChange}/>
-        
+        <div>PlayBack Speed: {1000/this.props.playbackSpeed*-1} fps</div>
+        <input type="range" id="playbackSpeed" max="-100" min="-2000" step="200" ref={this.playbackRef} onChange={this.playbackChange}/>
+        <div>
+          <label>view previous frame:</label>
+            <input type="checkbox" class="fps"ref={this.viewPrevRef} onChange={() => {
+              this.props.changeViewPreviousFrame(this.viewPrev.checked);
+            }}/>
+            <span class="viewPrevFrameSwitch"></span>
+        </div>
       </div>
       <div className="Tools">
       </div>
