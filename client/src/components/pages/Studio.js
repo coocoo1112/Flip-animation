@@ -290,26 +290,11 @@ class Studio extends React.Component {
         deleteFrame: true,
       })
       this.state.frames.splice(this.state.currentFrame, 1);
-      // this.setState({
-      //   prevFrame: this.state.currentFrame,
-      //   currentFrame: this.state.currentFrame,
-      //   switchFrame: true,
-      // })
-      // const curr = this.state.currentFrame;
-      // var tempFrames = this.state.frames;
-      // var tempIds = this.state.frameIds;
-      // tempFrames.splice(curr, 1);
-      // tempIds.splice(curr, 1);
-      // const prev = this.state.frameIds;
-      // this.setState({
-      //   frames: tempFrames,
-      //   frameIds: tempIds,
-      //   currentFrame: curr,
-      //   switchFrame: true,
-      // }, () => {
-      //   console.log("State before: ", prev);
-      //   console.log("Current state: ", this.state.frameIds)
-      // })
+      var tempIds = this.state.frameIds;
+      tempIds.splice(this.state.currentFrame, 1);
+      this.setState({
+        frameIds: tempIds,
+      })
     }
 
     clearFrame = () => {
