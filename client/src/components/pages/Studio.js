@@ -97,6 +97,7 @@ class Studio extends React.Component {
           frameIds: [null],
           project: null,
           newFrame: false,
+          deleteFrame: false,
           switchFrame: false,
           prevFrame: 0,
           play: false,
@@ -259,7 +260,7 @@ class Studio extends React.Component {
 
 
     createNewFrame = () => {
-      const curr = this.state.currentFrame
+      const curr = this.state.currentFrame;
       var tempFrames = this.state.frames;
       var tempIds = this.state.frameIds;
       tempFrames.splice(curr+1, 0, null);
@@ -284,21 +285,31 @@ class Studio extends React.Component {
     }
 
     deleteFrame = () => {
-      const curr = this.state.currentFrame
-      var tempFrames = this.state.frames;
-      var tempIds = this.state.frameIds;
-      tempFrames.splice(curr, 1);
-      tempIds.splice(curr, 1);
-      const prev = this.state.frameIds;
       this.setState({
-        frames: tempFrames,
-        frameIds: tempIds,
-        currentFrame: curr,
-        switchFrame: true,
-      }, () => {
-        console.log("State before: ", prev);
-        console.log("Current state: ", this.state.frameIds)
+        currentFrame: this.state.currentFrame-1,
+        deleteFrame: true,
       })
+      this.state.frames.splice(this.state.currentFrame, 1);
+      // this.setState({
+      //   prevFrame: this.state.currentFrame,
+      //   currentFrame: this.state.currentFrame,
+      //   switchFrame: true,
+      // })
+      // const curr = this.state.currentFrame;
+      // var tempFrames = this.state.frames;
+      // var tempIds = this.state.frameIds;
+      // tempFrames.splice(curr, 1);
+      // tempIds.splice(curr, 1);
+      // const prev = this.state.frameIds;
+      // this.setState({
+      //   frames: tempFrames,
+      //   frameIds: tempIds,
+      //   currentFrame: curr,
+      //   switchFrame: true,
+      // }, () => {
+      //   console.log("State before: ", prev);
+      //   console.log("Current state: ", this.state.frameIds)
+      // })
     }
 
     clearFrame = () => {
@@ -316,6 +327,12 @@ class Studio extends React.Component {
     setNewFrameFalse = ()  => {
       this.setState({
         newFrame: false,
+      })
+    }
+
+    setDeleteFrameFalse = () => {
+      this.setState({
+        deleteFrame: false,
       })
     }
 
@@ -374,6 +391,8 @@ class Studio extends React.Component {
               thickness={this.state.thickness}
               saveFrame={this.saveCanvasImage}
               newFrame = {this.state.newFrame}
+              deleteFrame = {this.state.deleteFrame}
+              setDeleteFrameFalse = {this.setDeleteFrameFalse}
               setNewFrameFalse = {this.setNewFrameFalse}
               switchFrame = {this.state.switchFrame}
               goToFrame = {this.goToFrame}

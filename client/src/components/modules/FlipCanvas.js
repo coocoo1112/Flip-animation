@@ -128,6 +128,11 @@ class FlipCanvas extends Component {
             this.props.setNewFrameFalse();
         }
 
+        if (this.props.deleteFrame) {
+            this.loadFrame(this.props.currentFrame, this.props.viewPreviousFrame);
+            this.props.setDeleteFrameFalse();
+        }
+
         if (this.props.switchFrame) {
             console.log("previous frame: ", this.props.prevFrame)
             this.props.saveFrame(this.canvas, this.props.prevFrame);
