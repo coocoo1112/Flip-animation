@@ -8,7 +8,7 @@
 */
 
 const express = require("express");
-
+ObjectId = require('mongodb').ObjectID;
 // import models so we can interact with the database
 const User = require("./models/user");
 const Frame = require("./models/frame");
@@ -82,35 +82,60 @@ router.post("/initsocket", (req, res) => {
 
 // anything else falls to this "not found" case
 router.post("/sendFrame", auth.ensureLoggedIn, (req, res) => {
-  var buf = __dirname+"/flip_logo_small.png";//new Buffer(uri, 'base64');
-  const fs = require("fs");
-  var fileStream = fs.createReadStream(buf);
+  //var buf = __dirname+"/flip_logo_small.png";//new Buffer(uri, 'base64');
+  //const fs = require("fs");
+  //var fileStream = fs.createReadStream(buf);
   //console.log(fileStream);
-  uploadParams.Body = fileStream;
-  const newFrame = new Frame({ 
-    user: req.user._id,
-    projectId: req.body.project,
-    link: null,
-  });
-  
-  newFrame.save().then((frame) => {
-    const link = req.user._id + "/" + req.body.project + "/" + frame._id + ".png";
-    uploadParams.Key = link
-    console.log(uploadParams);
-    newFrame.link = link
-    console.log(frame._id);
-    newFrame.save().then((frame) => console.log(frame._id));
-    s3.upload (uploadParams, function (err, data) {
-      console.log("test");
-      if (err) {
-        console.log("Error", err);
-      } if (data) {
-        //res.send(data.Location)
-        console.log("Upload Success", data.Location);
-      }
+  uploadParams.Body = req.body.stream;//fileStream;
+  if (req.body.id) {
+    Frame.find({ _id: req.body.id }).then((frame) => {
+      frame = frame[0];
+      console.log("LINK+++++++++++", frame)
+      const link = frame.link;//req.user._id + "/" + req.body.project + "/" + frame._id ;//".png";
+      uploadParams.Key = link;
+      s3.upload (uploadParams, function (err, data) {
+        console.log("test");
+        if (err) {
+          console.log("Error", err);
+        } if (data) {
+          //res.send(data.Location)
+          console.log("Upload Success", data.Location);
+        }
+      });
+      out = {
+        id: frame._id,
+      };
+      res.send(out);
     });
-    res.send(frame._id)
-  });
+  }
+  else {
+    const newFrame = new Frame({ 
+      user: req.user._id,
+      projectId: req.body.project,
+      link: null,
+    });
+    newFrame.save().then((frame) => {
+      const link = req.user._id + "/" + req.body.project + "/" + frame._id ;//+ ".png";
+      uploadParams.Key = link
+      //console.log(uploadParams);
+      newFrame.link = link
+      console.log(frame._id);
+      newFrame.save().then((frame) => console.log(frame._id));
+      s3.upload (uploadParams, function (err, data) {
+        console.log("test");
+        if (err) {
+          console.log("Error", err);
+        } if (data) {
+          //res.send(data.Location)
+          console.log("Upload Success", data.Location);
+        }
+      });
+      out = {
+        id: frame._id,
+      };
+      res.send(out);
+    });
+  }
 })
 
 router.post("/newProject", auth.ensureLoggedIn, (req, res) => {
@@ -136,6 +161,15 @@ router.post("/fileToS3", auth.ensureLoggedIn, (req, res) => {
     });
 })
 
+router.post("/updateFrameList", auth.ensureLoggedIn, (req,res) => {
+  Project.find({ user: req.user._id, name: req.body.project }).then((frameObj) => {
+    console.log(frameObj);
+    proj = frameObj[0]
+    proj.frameOrder = req.body.order;
+    proj.save().then((output) => res.send(output))
+  });
+})
+
 router.get("/getFrames", (req,res) => {
   Frame.find({ user: req.user._id, projectId: req.query.project }).then((frames) => {
     //res.send([req.user._id, req.query.project, frames]);
@@ -143,7 +177,7 @@ router.get("/getFrames", (req,res) => {
       return frame.link
     });
     var streams = links.map((link) => {
-      params = {
+      const params = {
         Bucket: 'wholesome-heavies',
         Key: link,
       }
@@ -153,6 +187,46 @@ router.get("/getFrames", (req,res) => {
     res.send(streams)
   });
 })
+
+
+
+router.get("/getFrame", (req,res) => {
+  console.log("abcd", req.query.idSend)
+  //console.log(req.query.id)
+  const frameId = new ObjectId(req.query.idSend);
+  //console.log("abc", frameId);
+  Frame.find({ user: req.user._id, projectId: req.query.project, _id: frameId }).then((frame) => {
+    //res.send([req.user._id, req.query.project, frames]);
+    frame = frame[0];
+    // console.log("user: ", req.user._id);
+    // console.log("project: ", req.query.project);
+    // console.log("frame id: ", frameId);
+    // console.log("frame: ", frame);
+    // console.log(frame.link)
+    const link = frame.link
+    const params = {
+      Bucket: 'wholesome-heavies',
+      Key: link,
+    };
+    console.log("===============================");
+    s3.getObject(params, function(err,data) {
+      if (err)
+        return err;
+      let objectData = data.Body.toString('utf-8');
+      //console.log(objectData);
+      const body = {
+        data: objectData,
+        sequence: req.query.sequence,
+      };
+      console.log(body.sequence)
+      res.send(body);
+    });
+    //res.send({});//.createReadStream());
+    console.log("===============================");
+  });
+})
+
+
 
 
 router.get('/getProjects', (req,res) => {
@@ -168,6 +242,16 @@ router.get("/getNumProjects", (req, res) => {
     var len = projects.length
     console.log(len)
     res.send({len})});
+})
+
+router.get("/getProject", (req,res) => {
+  Project.find({ user: req.user._id, name: req.query.project}).then((project) => {
+    res.send(project)
+  })
+})
+
+router.get("/getFramesInOrder", (req, res) => {
+
 })
 
 
