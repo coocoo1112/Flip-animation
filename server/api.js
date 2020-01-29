@@ -231,6 +231,8 @@ router.get("/getFrame", (req,res) => {
 
 router.get('/getProjects', (req,res) => {
   Project.find({ user: req.user._id}).then((projects) => {
+    var len = projects.length
+    console.log(len)
     res.send(projects)
   })
 })
@@ -266,8 +268,6 @@ router.get("/validateProjectName", (req,res) => {
     }
   });
 })
-
-
 
 
 router.all("*", (req, res) => {

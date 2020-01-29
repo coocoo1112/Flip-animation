@@ -52,21 +52,21 @@ class App extends Component {
   render() {
     return (
       <>
-        {this.state.userId ?  (
+        {this.state.userId?  (
           <>
           <NavBar/>
           <div>
             <Router>
-              <Skeleton
+              <Studio
                 path="/"
-                handleLogin={this.handleLogin}
-                handleLogout={this.handleLogout}
-                userId={this.state.userId}
               />
               <Studio
                 path="/studio/"
               />
-              <Profile path="/profile/"/>
+              <Profile
+                path="/profile/"
+                handleLogout={this.handleLogout}
+              />
               <ToolNavBar path="/toolBar/"/>
               <NavBar path="nav"/>
               <NotFound default />

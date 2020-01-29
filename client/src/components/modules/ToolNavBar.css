@@ -5,17 +5,20 @@ body {
   overflow: hidden
 }
 
-#right {
-  background-color: var(--other-yellow);
-  position: absolute;
-  right: 0;
-  width: 20%;
+.ToolContainer{
+  display: flex;
+  flex-direction: column;
   height: 80%;
+  width: 100%;
+  justify-content: center;
+}
+#right {
+  /*background-color: var(--other-yellow);*/
+  width: 100%;
+  height: 60%;
   /* border: 3px solid #73AD21; */
   /* padding: 10px; */
-  vertical-align: top;
   border-radius: 20px 0 0 0;
-  bottom: 0;
 }
 
 .footer {
@@ -29,20 +32,16 @@ body {
   color: var(--main-green);
 }
 
-.Tools {
-  position: absolute;
+.ToolBar {
   color: var(--main-green);
   background-color: var(--main-yellow);
-  margin: 0;
-  bottom: 0;
   height: 10%;
   width: 100%;
-  vertical-align: bottom;
+  border-radius: 0 0 0 20px;
 }
 
-.CurrentTool {
-  position: absolute;
-  top: 0;
+.CurrentToolTitle {
+  /*top: 0;*/
   width: 100%;
   height: 10%;
   background-color: var(--main-yellow);
@@ -50,8 +49,12 @@ body {
 }
 
 .CurrentToolContainer {
-  position: absolute;
-  top: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 80%;
+  background-color: var(--other-yellow);
 }
 
 .ChangeColor {
@@ -60,7 +63,23 @@ body {
   width: 30px;
   height: 30px;
   border-radius: 15px;
-  margin-left: 10px
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.buttonColorContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.fps {
+  direction: rtl;
+}
+
+#ED3333 {
+  background-color: #ED3333;
 }
 
 #red {

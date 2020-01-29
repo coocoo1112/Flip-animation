@@ -10,8 +10,12 @@
   
   .NavBar-linkContainer {
     margin-left: var(--xl);
-    margin-top: var(--m);
+    /* margin-top: var(--m); */
     vertical-align: top;
+    color: var(--main-yellow);
+    font-size: 20px;
+    font-weight: bold;
+    align-items: center;
   }
   
   .NavBar-link,
@@ -32,4 +36,12 @@
   .NavBar-link + .NavBar-link {
     margin-left: var(--xl);
   }
+
+  .profileIcon {
+    width: 7%;
+    margin: 0;
+  }
   
+  .profile-link {
+    right: 0;
+  }

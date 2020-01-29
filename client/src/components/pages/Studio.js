@@ -90,17 +90,22 @@ class Studio extends React.Component {
           },
           mouseDown: false,
           color: "000000",
-          thickness: 1,
+          thickness: 10,
           canvas: null,
           currentFrame: 0,
           frames: [null],
           frameIds: [null],
           project: null,
           newFrame: false,
+          deleteFrame: false,
           switchFrame: false,
           prevFrame: 0,
           play: false,
           projects: [null],
+          clearFrame: false,
+          playbackSpeed: 1000,
+          viewPreviousFrame: true,
+          repeatFrame: false,
         };
       this.fs = require("fs");
     }
@@ -109,12 +114,11 @@ class Studio extends React.Component {
       if (e.target.id === "eraser") {
         this.setState({
           color: "white",
-          thickness: 30,
         });
       } else {
+        console.log(e.target.id);
         this.setState({
-          color: e.target.id,
-          thickness: 1,
+          color: "#"+e.target.id,
         })
       }
     }
@@ -219,7 +223,14 @@ class Studio extends React.Component {
       })
     }
 
+    changeThickness = (newThickness) => {
+      this.setState({
+        thickness: newThickness,
+      })
+    }
+
     saveCanvasImage = (canvas, i) => {
+      this.state.frames[i] = canvas.toDataURL("image/png");
       var canvasStream = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
       console.log(canvasStream);
       //window.location.href=canvasStream;
@@ -268,7 +279,7 @@ class Studio extends React.Component {
 
 
     createNewFrame = () => {
-      const curr = this.state.currentFrame
+      const curr = this.state.currentFrame;
       var tempFrames = this.state.frames;
       var tempIds = this.state.frameIds;
       tempFrames.splice(curr+1, 0, null);
@@ -292,9 +303,60 @@ class Studio extends React.Component {
       
     }
 
+    deleteFrame = () => {
+      this.setState({
+        currentFrame: this.state.currentFrame-1,
+        deleteFrame: true,
+      })
+      this.state.frames.splice(this.state.currentFrame, 1);
+      var tempIds = this.state.frameIds;
+      tempIds.splice(this.state.currentFrame, 1);
+      this.setState({
+        frameIds: tempIds,
+      })
+    }
+
+    createRepeatFrame = () => {
+      const curr = this.state.currentFrame;
+      var tempFrames = this.state.frames;
+      var tempIds = this.state.frameIds;
+      tempFrames.splice(curr+1, 0, null);
+      tempIds.splice(curr+1, 0, null);
+      this.setState({
+        frames: tempFrames,
+        frameIds: tempIds,
+        repeatFrame: true,
+        currentFrame: curr + 1,
+      })
+    }
+
+    setRepeatFrameFalse = () => {
+      this.setState({
+        repeatFrame: false,
+      })
+    }
+
+    clearFrame = () => {
+      this.setState({
+        clearFrame: true,
+      })
+    }
+
+    setClearFrameFalse = () => {
+      this.setState({
+        clearFrame: false,
+      })
+    }
+
     setNewFrameFalse = ()  => {
       this.setState({
         newFrame: false,
+      })
+    }
+
+    setDeleteFrameFalse = () => {
+      this.setState({
+        deleteFrame: false,
       })
     }
 
@@ -326,36 +388,73 @@ class Studio extends React.Component {
       })
     }
 
-    // componentDidUpdate() {
-    //   this.getProjects();
-    // }
+    changePlaybackSpeed = (newSpeed) => {
+      this.setState({
+        playbackSpeed: newSpeed,
+      })
+    }
+
+    changeViewPreviousFrame = (bool) => {
+      this.setState({
+        viewPreviousFrame: bool,
+        prevFrame: this.state.currentFrame,
+        currentFrame: this.state.currentFrame,
+        switchFrame: true,
+      })
+    }
   
     render() {
       return (
         <>
-            <FlipCanvas
-              className="flipCanvas"
-              frameIds={this.state.frameIds}
-              currentFrame={this.state.currentFrame}
-              frames={this.state.frames}
-              color={this.state.color}
-              thickness={this.state.thickness}
-              saveFrame={this.saveCanvasImage}
-              newFrame = {this.state.newFrame}
-              setNewFrameFalse = {this.setNewFrameFalse}
-              switchFrame = {this.state.switchFrame}
-              setSwitchFrameFalse = {this.setSwitchFrameFalse}
-              prevFrame = {this.state.prevFrame}
-              play = {this.state.play}
-              setPlayAnimationFalse = {this.setPlayAnimationFalse}
-            />
-            <div>
-              <button onClick={() => this.goToFrame(this.state.currentFrame-1)}>Previous</button>
-              <button onClick={() => this.goToFrame(this.state.currentFrame+1)}>Next</button>
-              <button onClick={() => this.createNewFrame()}>New Frame</button>
+          <div className = "StudioPageContainer">
+            <div className = "StudioandToolBarContainer" >
+              <div className = "StudioContainer">
+                <FlipCanvas
+                  className="flipCanvas"
+                  frameIds={this.state.frameIds}
+                  currentFrame={this.state.currentFrame}
+                  frames={this.state.frames}
+                  color={this.state.color}
+                  thickness={this.state.thickness}
+                  saveFrame={this.saveCanvasImage}
+                  newFrame = {this.state.newFrame}
+                  deleteFrame = {this.state.deleteFrame}
+                  setDeleteFrameFalse = {this.setDeleteFrameFalse}
+                  setNewFrameFalse = {this.setNewFrameFalse}
+                  switchFrame = {this.state.switchFrame}
+                  goToFrame = {this.goToFrame}
+                  setSwitchFrameFalse = {this.setSwitchFrameFalse}
+                  prevFrame = {this.state.prevFrame}
+                  play = {this.state.play}
+                  clearFrame = {this.state.clearFrame}
+                  setClearFrameFalse = {this.setClearFrameFalse}
+                  setPlayAnimationFalse = {this.setPlayAnimationFalse}
+                  playbackSpeed = {this.state.playbackSpeed}
+                  viewPreviousFrame = {this.state.viewPreviousFrame}
+                  repeatFrame = {this.state.repeatFrame}
+                  setRepeatFrameFalse = {this.setRepeatFrameFalse}
+                />
+                <div className = "ButtonsContainer">
+                  <button className = "FrameButton" onClick={this.deleteFrame}>Delete Frame</button>
+                  <button className = "FrameButton" onClick={this.clearFrame}>Clear Frame</button>
+                  <button className = "FrameButton" onClick={this.createRepeatFrame}>Repeat Frame</button>
+                  <button className = "FrameButton" onClick={() => this.createNewFrame()}>New Frame</button>
+                </div>
+              </div>
+              <div className = "ToolBarContainer">
+                <ToolNavBar
+                  Colorchanger = {(e) => this.changeColor(e)}
+                  changeThickness = {this.changeThickness}
+                  changePlaybackSpeed = {this.changePlaybackSpeed}
+                  playbackSpeed = {this.state.playbackSpeed}
+                  changeViewPreviousFrame = {this.changeViewPreviousFrame}
+                />
+              </div>
             </div>
-            <div>
-              <button onClick={this.PlayAnimation}>Play</button>
+          </div>
+          <div className = "ThumbNailBarContainer">
+            <div className = "PlayButtonContainer">
+              <img src={require("../../../../assets/Play Button.png")} onClick={this.PlayAnimation} className = "playButton"/>
             </div>
             <ThumbnailBar 
               className="Thumbnails"
@@ -364,22 +463,7 @@ class Studio extends React.Component {
               goToFrame = {this.goToFrame}
               frames = {this.state.frames}
             />
-            <ToolNavBar
-              Colorchanger = {(e) => this.changeColor(e)}
-            />
-            <div>
-              <button onClick={() => this.getProjects()}>test</button>
-              <button onClick={() => showFrame(this.state, this.state.canvas)}>show frame</button>
-              <button onClick={() => this.addProject()}>add project</button>
-            </div>
-            <div className="dropdown">
-              <button class="dropbtn">Dropdown
-      `         <i class="fa fa-caret-down"></i>
-              </button>
-              <div class="dropdown-content">
-                {this.state.projects}
-              </div>
-            </div>
+          </div>
         </>
       )  
     }

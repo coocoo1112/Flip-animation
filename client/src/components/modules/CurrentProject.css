@@ -1,0 +1,72 @@
+.ProjectDisplay{
+    text-align: center;
+    justify-content: center;
+    margin: var(--m);
+    border-color: var(--main-green);
+    border-radius: 5%;
+    width: 50%;
+    color: var(--main-green);
+    text-decoration: none;
+    font-size: large;
+}
+
+.Project-Container{
+    width: 33%;
+    margin-top: var(--l);
+    margin-bottom: var(--l);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.FakeCanvasContainer {
+    margin-top: var(--s);
+    margin-bottom: var(--s);
+    width:150px;
+    height:110px;
+    left: 0%;
+}
+
+.LinkContainer {
+    margin-top: var(--s);
+    margin-bottom: var(--s);
+}
+
+.FrameLinkContainer{
+    width: 140px;
+    height: 100px;
+    color: white;
+    text-decoration: none;
+}
+
+.Frame1 {
+    position: relative;
+    bottom: 200px;
+    height: 100px;
+    width: 140px;
+    border-radius: 4px;
+    background-color: white;
+    color: white;
+    border: none;
+}
+
+.FakeShadow1 {
+    position: relative;
+    bottom: 96px;
+    left: 4px;
+    background-color: var(--medgrey);
+    height: 100px;
+    width: 140px;
+    border-radius: 4px;
+}
+
+.FakeShadow2 {
+    position: relative;
+    top: 8px;
+    left: 8px;
+    background-color: var(--grey);
+    height: 100px;
+    width: 140px;
+    border-radius: 4px;
+}
+

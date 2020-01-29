@@ -16,7 +16,8 @@
 
 /* TODO: REPLACE WITH YOUR OWN FONT! */
 @import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
-
+@import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Open+Sans+Condensed:300&display=swap');
 :root {
   --main-green: #618282;
   --main-yellow: #EDAB3A;
@@ -24,6 +25,7 @@
   --medgrey: #C4C4C4;
   --grey: #737374;
   --other-yellow: #FFDB9E;
+  --light-green: #84AAAA;
 
   --xs: 4px;
   --s: 8px;
@@ -35,8 +37,9 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Open Sans Condensed', sans-serif;
   font-weight: 300;
+  color: var(--main-green);
 }
 
 form {
