@@ -41,6 +41,7 @@ function login(req, res) {
     .then((user) => {
       // persist user in the session
       req.session.user = user;
+      console.log("worked");
       // console.log("step1");
       // const bucketFolder = {
       //   Bucket : "basjksdnla",

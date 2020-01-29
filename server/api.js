@@ -12,7 +12,7 @@ ObjectId = require('mongodb').ObjectID;
 // import models so we can interact with the database
 const User = require("./models/user");
 const Frame = require("./models/frame");
-const Project = require("./models/project")
+const Project = require("./models/project");
 var AWS = require('aws-sdk');
 AWS.config.update({region: 'us-east-2'});
 s3 = new AWS.S3({apiVersion: '2006-03-01'});

@@ -118,6 +118,24 @@ class Studio extends React.Component {
         })
       }
     }
+
+    removeFrame() {
+      tempFrames = this.state.frames;
+      tempIds = this.state.frameIds
+      tempFrames.splice(this.state.currentFrame,1)
+      tempIds.splice(this.state.currentFrame,1)
+      this.setState({
+        frames: tempFrames,
+        frameIds: tempIds,
+      });
+      const body = {
+        project: this.state.project,
+        order: tempIds,
+      }
+      post("/api/updateFrameList", body).then((hi) => {
+        console.log("HIIIII", hi)
+      })
+    }
     
     addProject() {
       var nameEntered = prompt("enter the name of your project");
@@ -212,7 +230,7 @@ class Studio extends React.Component {
         id: this.state.frameIds[i],//this.state.currentFrame - 1],
       };
       console.log("ID: ", body.id);
-      //console.log("2");
+      console.log("2");
       post("/api/sendFrame", body).then((output) => {
         const id = output.id;
         const temp = this.state.frameIds;
