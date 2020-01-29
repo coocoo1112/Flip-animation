@@ -33,7 +33,7 @@ const socket = require("./server-socket");
 
 // Server configuration below
 // TODO change connection URL after setting up your team database
-const mongoConnectionURL = process.env.ATLAS_SRV//"mongodb+srv://niklasmannhardt:16flammingo309@cluster0-y8uhl.mongodb.net/test?retryWrites=true&w=majority"; //
+const mongoConnectionURL = "mongodb+srv://niklasmannhardt:16flammingo309@cluster0-y8uhl.mongodb.net/test?retryWrites=true&w=majority"; //process.env.ATLAS_SRV//
 // TODO change database name to the name you chose
 const databaseName = "flip";
 
@@ -57,7 +57,7 @@ app.use(express.json());
 // set up a session, which will persist login data across requests
 app.use(
   session({
-    secret: process.env.SECRET_SRV,//"session-secret", //
+    secret: "session-secret", //process.env.SECRET_SRV,//
     resave: false,
     saveUninitialized: false,
   })
