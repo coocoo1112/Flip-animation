@@ -27,37 +27,21 @@ const router = express.Router();
 //initialize socket
 const socket = require("./server-socket");
 
-function doesUserExist(user) {
-  var bucketParams = {
-    Bucket : 'wholesome-heavies',
-    Key: "users/" + user._id
-  };
-  s3.headObject(bucketParams, function(err, data) {
-    if (err) {
-      return false;
-    } else {
-      return true;
-    }
-  });
-}
+// function doesUserExist(user) {
+//   var bucketParams = {
+//     Bucket : 'wholesome-heavies',
+//     Key: "users/" + user._id
+//   };
+//   s3.headObject(bucketParams, function(err, data) {
+//     if (err) {
+//       return false;
+//     } else {
+//       return true;
+//     }
+//   });
+// }
 
-router.post("/login", auth.login);//, (req,res) => {
-  // console.log("test");
-  // const bucketFolder = {
-  //   Bucket : 'wholesome-heavies',
-  //   Key: "users/" + req.user._id
-  // }
-  // s3.headBucket({Bucket:bucketFolder},function(err,data){
-  //   if(err){
-  //       s3.createBucket({Bucket:bucketFolder},function(err,data){
-  //           if(err){ throw err; }
-  //           console.log("Bucket created");
-  //       });
-  //    } else {
-  //        console.log("Bucket exists and we have access");
-  //    }
-  // });
-//});
+router.post("/login", auth.login);
 router.post("/logout", auth.logout);
 router.get("/whoami", (req, res) => {
   if (!req.user) {
@@ -81,12 +65,19 @@ router.post("/initsocket", (req, res) => {
 // |------------------------------|
 
 // anything else falls to this "not found" case
+/*
+Used to send individual canvas octet streams to the aws server and make a mongoBD object of it
+input: {
+  id: the frame id if it is defined-string, null if it is a new frame]
+  project: the name of the project to link it to-string
+  stream: the octet stream of the image-string maybe
+}
+Output: {
+  id: MongoDB ObjectID
+}
+*/
 router.post("/sendFrame", auth.ensureLoggedIn, (req, res) => {
-  //var buf = __dirname+"/flip_logo_small.png";//new Buffer(uri, 'base64');
-  //const fs = require("fs");
-  //var fileStream = fs.createReadStream(buf);
-  //console.log(fileStream);
-  uploadParams.Body = req.body.stream;//fileStream;
+  uploadParams.Body = req.body.stream;
   if (req.body.id) {
     Frame.find({ _id: req.body.id }).then((frame) => {
       frame = frame[0];
@@ -138,6 +129,12 @@ router.post("/sendFrame", auth.ensureLoggedIn, (req, res) => {
   }
 })
 
+
+/*
+Used to create a new project object in MongoDB
+input: {name: the name of the project, string}
+output: the project object from mongoDB
+*/
 router.post("/newProject", auth.ensureLoggedIn, (req, res) => {
     const newProject = new Project({
       name: req.body.name,
@@ -146,6 +143,9 @@ router.post("/newProject", auth.ensureLoggedIn, (req, res) => {
     newProject.save().then((project) => res.send(project));
 })
 
+/*
+I dont think this is used but ill leave it just in case
+*/
 router.post("/fileToS3", auth.ensureLoggedIn, (req, res) => {
     uploadParams.Body = req.body.buffer;
     var path = require('path');
@@ -161,6 +161,14 @@ router.post("/fileToS3", auth.ensureLoggedIn, (req, res) => {
     });
 })
 
+/*
+update the order of frames for a specific project
+input: {
+  project: the name of the project
+  order: and array of strings representing the objectIDs of the frames
+}
+output: the project Object saved in Mongo
+*/
 router.post("/updateFrameList", auth.ensureLoggedIn, (req,res) => {
   Project.find({ user: req.user._id, name: req.body.project }).then((frameObj) => {
     console.log(frameObj);
@@ -170,6 +178,10 @@ router.post("/updateFrameList", auth.ensureLoggedIn, (req,res) => {
   });
 })
 
+
+/*
+I also dont think this is used 
+*/
 router.get("/getFrames", (req,res) => {
   Frame.find({ user: req.user._id, projectId: req.query.project }).then((frames) => {
     //res.send([req.user._id, req.query.project, frames]);
@@ -189,46 +201,47 @@ router.get("/getFrames", (req,res) => {
 })
 
 
-
+/*
+Gets a specific frame's octet stream
+input: {
+  idSend: string of the objectID of the frame you want
+  project: the project you want the fram from
+  sequence: the sequence you want the frame to appear in
+}
+output: {
+  data: the octet stream of the canvas image
+  sequence: the order wanted
+}
+*/
 router.get("/getFrame", (req,res) => {
-  console.log("abcd", req.query.idSend)
-  //console.log(req.query.id)
   const frameId = new ObjectId(req.query.idSend);
-  //console.log("abc", frameId);
   Frame.find({ user: req.user._id, projectId: req.query.project, _id: frameId }).then((frame) => {
-    //res.send([req.user._id, req.query.project, frames]);
     frame = frame[0];
-    // console.log("user: ", req.user._id);
-    // console.log("project: ", req.query.project);
-    // console.log("frame id: ", frameId);
-    // console.log("frame: ", frame);
-    // console.log(frame.link)
     const link = frame.link
     const params = {
       Bucket: 'wholesome-heavies',
       Key: link,
     };
-    console.log("===============================");
     s3.getObject(params, function(err,data) {
       if (err)
         return err;
       let objectData = data.Body.toString('utf-8');
-      //console.log(objectData);
       const body = {
         data: objectData,
         sequence: req.query.sequence,
       };
-      console.log(body.sequence)
       res.send(body);
     });
-    //res.send({});//.createReadStream());
-    console.log("===============================");
   });
 })
 
-
-
-
+/*
+gets all projects for a user
+input: nothing
+output: {
+  all the projects a certain user has
+}
+*/
 router.get('/getProjects', (req,res) => {
   Project.find({ user: req.user._id}).then((projects) => {
     var len = projects.length
@@ -237,6 +250,12 @@ router.get('/getProjects', (req,res) => {
   })
 })
 
+
+/*
+gets the number of projects a user has
+input: nothing
+output: {number of projects}
+*/
 router.get("/getNumProjects", (req, res) => {
   Project.find({ user: req.user._id }).then((projects) => {
     var len = projects.length
@@ -244,17 +263,27 @@ router.get("/getNumProjects", (req, res) => {
     res.send({len})});
 })
 
+
+/*
+gets a certain project 
+input: {
+  project: the name of the project to fetch
+}
+output: the project object from mongo, might be in an array so watch out and only get the 0th element if so idrk rn
+*/
 router.get("/getProject", (req,res) => {
   Project.find({ user: req.user._id, name: req.query.project}).then((project) => {
     res.send(project)
   })
 })
 
-router.get("/getFramesInOrder", (req, res) => {
-
-})
-
-
+/*
+makes sure the project name hasnt been taken yet
+input: {
+  name: the desired name
+}
+output: true if available, false otherwise
+*/
 router.get("/validateProjectName", (req,res) => {
   Project.find({ user: req.user._id }).then((projects) => {
     var temp = projects.filter((project) => {
