@@ -39,16 +39,12 @@ function getOrCreateUser(user) {
 function login(req, res) {
   verify(req.body.token)
     .then((user) => getOrCreateUser(user))
-    .then((user1) => {
+    .then((user) => {
       // persist user in the session
-      req.session.user = user1;
+      req.session.user = user;
       console.log("worked");
-      Project.find({ user: user1._id}).then((projects) => {
-        const body = {
-          user: user1,
-          projs: projects,
-        }
-        res.send(body);
+      Project.find({ user: user._id}).then((projects) => {
+        res.send(user);
       })
 
       
