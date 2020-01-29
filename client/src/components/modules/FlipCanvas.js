@@ -120,12 +120,21 @@ class FlipCanvas extends Component {
         this.ctx.lineWidth = this.props.thickness;
 
         if (this.props.newFrame) {
-            //console.log("new");
             this.props.saveFrame(this.canvas, this.props.currentFrame-1);
-            //console.log("1");
             this.blankCanvas();
             this.loadFrame(this.props.currentFrame, this.props.viewPreviousFrame);
             this.props.setNewFrameFalse();
+        }
+
+        if (this.props.repeatFrame) {
+            this.props.saveFrame(this.canvas, this.props.currentFrame-1);
+            this.loadFrame(this.props.currentFrame, this.props.viewPreviousFrame);
+            this.props.setRepeatFrameFalse();
+        }
+
+        if (this.props.deleteFrame) {
+            this.loadFrame(this.props.currentFrame, this.props.viewPreviousFrame);
+            this.props.setDeleteFrameFalse();
         }
 
         if (this.props.switchFrame) {
@@ -137,6 +146,7 @@ class FlipCanvas extends Component {
 
         if (this.props.clearFrame) {
             this.blankCanvas();
+            this.props.setClearFrameFalse();
         }
 
         if (this.props.play) {
@@ -150,11 +160,13 @@ class FlipCanvas extends Component {
                 frame += 1;
                 if (frame == this.props.frames.length) {
                     window.clearInterval(animationInterval);
-                    this.props.goToFrame(this.props.frames.length - 1);
+                    // this.props.goToFrame(this.props.frames.length - 1);
+                    if (this.props.currentFrame != this.props.frames.length-1) {
+                        this.props.goToFrame(this.props.frames.length - 1);
+                    }
                 }
             }, this.props.playbackSpeed);
             this.props.setPlayAnimationFalse();
-            
         }
     }
 

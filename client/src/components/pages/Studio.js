@@ -97,6 +97,7 @@ class Studio extends React.Component {
           frameIds: [null],
           project: null,
           newFrame: false,
+          deleteFrame: false,
           switchFrame: false,
           prevFrame: 0,
           play: false,
@@ -104,6 +105,7 @@ class Studio extends React.Component {
           clearFrame: false,
           playbackSpeed: 1000,
           viewPreviousFrame: true,
+          repeatFrame: false,
         };
       this.fs = require("fs");
     }
@@ -259,7 +261,7 @@ class Studio extends React.Component {
 
 
     createNewFrame = () => {
-      const curr = this.state.currentFrame
+      const curr = this.state.currentFrame;
       var tempFrames = this.state.frames;
       var tempIds = this.state.frameIds;
       tempFrames.splice(curr+1, 0, null);
@@ -284,20 +286,35 @@ class Studio extends React.Component {
     }
 
     deleteFrame = () => {
-      const curr = this.state.currentFrame
+      this.setState({
+        currentFrame: this.state.currentFrame-1,
+        deleteFrame: true,
+      })
+      this.state.frames.splice(this.state.currentFrame, 1);
+      var tempIds = this.state.frameIds;
+      tempIds.splice(this.state.currentFrame, 1);
+      this.setState({
+        frameIds: tempIds,
+      })
+    }
+
+    createRepeatFrame = () => {
+      const curr = this.state.currentFrame;
       var tempFrames = this.state.frames;
       var tempIds = this.state.frameIds;
-      tempFrames.splice(curr, 1);
-      tempIds.splice(curr, 1);
-      const prev = this.state.frameIds;
+      tempFrames.splice(curr+1, 0, null);
+      tempIds.splice(curr+1, 0, null);
       this.setState({
         frames: tempFrames,
         frameIds: tempIds,
-        currentFrame: curr,
-        switchFrame: true,
-      }, () => {
-        console.log("State before: ", prev);
-        console.log("Current state: ", this.state.frameIds)
+        repeatFrame: true,
+        currentFrame: curr + 1,
+      })
+    }
+
+    setRepeatFrameFalse = () => {
+      this.setState({
+        repeatFrame: false,
       })
     }
 
@@ -316,6 +333,12 @@ class Studio extends React.Component {
     setNewFrameFalse = ()  => {
       this.setState({
         newFrame: false,
+      })
+    }
+
+    setDeleteFrameFalse = () => {
+      this.setState({
+        deleteFrame: false,
       })
     }
 
@@ -347,9 +370,6 @@ class Studio extends React.Component {
       })
     }
 
-    // componentDidUpdate() {
-    //   this.getProjects();
-    // }
     changePlaybackSpeed = (newSpeed) => {
       this.setState({
         playbackSpeed: newSpeed,
@@ -373,23 +393,33 @@ class Studio extends React.Component {
               <div className = "StudioContainer">
                 <FlipCanvas
                   className="flipCanvas"
+                  frameIds={this.state.frameIds}
                   currentFrame={this.state.currentFrame}
                   frames={this.state.frames}
                   color={this.state.color}
                   thickness={this.state.thickness}
                   saveFrame={this.saveCanvasImage}
                   newFrame = {this.state.newFrame}
+                  deleteFrame = {this.state.deleteFrame}
+                  setDeleteFrameFalse = {this.setDeleteFrameFalse}
                   setNewFrameFalse = {this.setNewFrameFalse}
                   switchFrame = {this.state.switchFrame}
+                  goToFrame = {this.goToFrame}
                   setSwitchFrameFalse = {this.setSwitchFrameFalse}
                   prevFrame = {this.state.prevFrame}
                   play = {this.state.play}
+                  clearFrame = {this.state.clearFrame}
+                  setClearFrameFalse = {this.setClearFrameFalse}
                   setPlayAnimationFalse = {this.setPlayAnimationFalse}
+                  playbackSpeed = {this.state.playbackSpeed}
+                  viewPreviousFrame = {this.state.viewPreviousFrame}
+                  repeatFrame = {this.state.repeatFrame}
+                  setRepeatFrameFalse = {this.setRepeatFrameFalse}
                 />
                 <div className = "ButtonsContainer">
                   <button className = "FrameButton" onClick={this.deleteFrame}>Delete Frame</button>
                   <button className = "FrameButton" onClick={this.clearFrame}>Clear Frame</button>
-                  <button className = "FrameButton">Repeat Frame</button>
+                  <button className = "FrameButton" onClick={this.createRepeatFrame}>Repeat Frame</button>
                   <button className = "FrameButton" onClick={() => this.createNewFrame()}>New Frame</button>
                 </div>
               </div>

@@ -46,8 +46,8 @@ class ToolNavBar extends Component {
   }
 
   playbackChange = () => {
-    console.log("change to", -1*this.playback.value);
-    this.props.changePlaybackSpeed(this.playback.value);
+    console.log("change to", 1000/this.playback.value);
+    this.props.changePlaybackSpeed(1000/this.playback.value);
   }
 
   ColorButton(color) {
@@ -129,12 +129,12 @@ class ToolNavBar extends Component {
             {this.ColorButton("FFFFFF")}
           </div>
         </div>
-        <div>PlayBack Speed: {1000/this.props.playbackSpeed*-1} fps</div>
-        <input type="range" id="playbackSpeed" max="-100" min="-2000" step="200" ref={this.playbackRef} onChange={this.playbackChange}/>
+        <div>PlayBack Speed: {Math.round(1000/this.props.playbackSpeed)} fps</div>
+        <input type="range" id="playbackSpeed" max="20" min="1" ref={this.playbackRef} onChange={this.playbackChange}/>
         <div className = "u-flex">
           view previous frame: 
           <label class="switch">
-            <input type="checkbox " ref={this.viewPrevRef} onChange={() => {
+            <input type="checkbox" ref={this.viewPrevRef} onChange={() => {
               this.props.changeViewPreviousFrame(this.viewPrev.checked);
             }}/>
             <span class="slider round viewPrevFrameSwitch"></span>
