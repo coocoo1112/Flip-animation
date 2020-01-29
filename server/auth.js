@@ -4,6 +4,7 @@ const socket = require("./server-socket");
 var AWS = require('aws-sdk');
 AWS.config.update({region: 'us-east-2'});
 s3 = new AWS.S3({apiVersion: '2006-03-01'});
+const Project = require("./models/project");
 
 // create a new OAuth client used to verify google sign-in
 //    TODO: replace with your own CLIENT_ID
@@ -38,30 +39,19 @@ function getOrCreateUser(user) {
 function login(req, res) {
   verify(req.body.token)
     .then((user) => getOrCreateUser(user))
-    .then((user) => {
+    .then((user1) => {
       // persist user in the session
-      req.session.user = user;
+      req.session.user = user1;
       console.log("worked");
-      // console.log("step1");
-      // const bucketFolder = {
-      //   Bucket : "basjksdnla",
-      //   //Key: "wholesome-heavies",
-      // };
-      // console.log("before");
-      // s3.headBucket(bucketFolder, (err,data) => {
-      //   console.log(err, " ", data);
-      //   if(err){
-      //     console.log("dne")
-      //       s3.createBucket(bucketFolder, function(err,data){
-      //           if(err){ throw err; }
-      //           console.log("Bucket created");
-      //       });
-      //    } else {
-      //        console.log("Bucket exists and we have access");
-      //    }
-      // });
-      //console.log(bucketFolder.Key)
-      res.send(user);
+      Project.find({ user: user1._id}).then((projects) => {
+        const body = {
+          user: user1,
+          projs: projects,
+        }
+        res.send(body);
+      })
+
+      
     })
     .catch((err) => {
       console.log(`Failed to log in: ${err}`);

@@ -7,8 +7,8 @@
     margin-right: auto; */
     /*margin-top: var(--xl);
     margin-bottom: var(--l);*/
-    width: 750px;
-    height: 550px;
+    width: 200px;
+    height: 200px;
 
     /* background-color: red; */ 
 }
@@ -33,8 +33,8 @@
     margin-right: auto; */
     /* margin: 10px; */
     background-color: var(--medgrey);
-    height: 500px;
-    width: 700px;
+    height: 200px;
+    width: 200px;
     border-radius: 20px;
 }
 
@@ -48,8 +48,8 @@
     margin-right: auto; */
     /* margin: 10px; */
     background-color: var(--grey);
-    height: 500px;
-    width: 700px;
+    height: 200px;
+    width: 200px;
     border-radius: 20px;
 }
 
@@ -62,8 +62,8 @@
     margin-right: auto; */
     /* margin: 10px; */
     background-color: var(--other-yellow);
-    height: 500px;
-    width: 700px;
+    height: 200px;
+    width: 200px;
     border-radius: 20px;
     transform: rotate(-6deg);
 }

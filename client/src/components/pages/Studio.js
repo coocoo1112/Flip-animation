@@ -110,6 +110,10 @@ class Studio extends React.Component {
       this.fs = require("fs");
     }
 
+    componentDidMount() {
+      this.getProjects();
+    }
+
     changeColor(e) {
       if (e.target.id === "eraser") {
         this.setState({
@@ -160,7 +164,14 @@ class Studio extends React.Component {
               this.setState({
                 project: nameEntered,
               })
-              post("/api/newProject", projectBody)
+              post("/api/newProject", projectBody).then(() => {
+                this.getProjects();
+                this.setState({
+                  frames: [null],
+                  frameIds: [null],
+                  clearFrame: true,
+                });
+              })
             });
           });
         }
@@ -440,7 +451,30 @@ class Studio extends React.Component {
                   <button className = "FrameButton" onClick={this.createRepeatFrame}>Repeat Frame</button>
                   <button className = "FrameButton" onClick={() => this.createNewFrame()}>New Frame</button>
                 </div>
+                <div>
+                  <button onClick={() => this.getProjects()}>test</button>
+
+              <button onClick={() => showFrame(this.state, this.state.canvas)}>show frame</button>
+
+              <button onClick={() => this.addProject()}>add project</button>
+
+            </div>
+
+            <div className="dropdown">
+
+              <button class="dropbtn">Dropdown
+
+      `         <i class="fa fa-caret-down"></i>
+
+              </button>
+
+              <div class="dropdown-content">
+
+                {this.state.projects}
               </div>
+              </div>
+              </div>
+
               <div className = "ToolBarContainer">
                 <ToolNavBar
                   Colorchanger = {(e) => this.changeColor(e)}

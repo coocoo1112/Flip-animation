@@ -173,14 +173,14 @@ class FlipCanvas extends Component {
     render() {
         return (
             <div class="CanvasContainer">
-                
-              <div className="Shadow3"></div>
-              <div className="Shadow2"></div>
-              <div className="Shadow1"></div>
-              
-              <canvas width="700" height="500" ref={this.canvasRef} class="Canvas"/>
+              { 
+            //   <div className="Shadow3"></div>
+            //   <div className="Shadow2"></div>
+            //   <div className="Shadow1"></div>
+              }
+              <canvas width="200" height="200" ref={this.canvasRef} class="Canvas"/>
 
-              <canvas width="700" height="500" ref={this.canvasRef2} class="Canvas"/>
+              <canvas width="200" height="200" ref={this.canvasRef2} class="Canvas"/>
             </div>
         )
     }
